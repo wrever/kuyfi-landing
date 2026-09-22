@@ -2,7 +2,7 @@ import { site } from '../config/site'
 
 /**
  * Landing copy: central editorial source. Rendered so far: `hero` and the core narrative
- * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`, `evidence`). Later sections are
+ * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`, `evidence`, `install`, `openSource`). Later sections are
  * still draft direction.
  *
  * Style guide (enforced by siteCopy.test.ts):
@@ -288,21 +288,67 @@ export const siteCopy = {
   },
 
   install: {
-    workingTitle: 'Install',
+    kicker: '[ 06 · INSTALL ]',
+    heading: 'Run Kuyfi locally.',
     body:
-      'Kuyfi is open source and available through npm. Install it globally, provide a Soroban ' +
-      'Contract ID and run the security terminal from your own environment.',
+      'Kuyfi is distributed through npm and runs from the command line. Install the package ' +
+      'globally, then launch the security terminal from your own environment.',
     command: site.installCommand,
     then: site.cliCommand,
     requirement: 'Node.js 20+',
+    steps: {
+      install: 'INSTALL',
+      launch: 'LAUNCH',
+    },
+    launchNote: 'Opens the interactive security terminal.',
+    labels: {
+      requires: 'Requires',
+      package: 'Package',
+      release: 'Release',
+    },
+    npmLink: 'View @kuyfi/kuyfi on npm',
+    copy: {
+      copy: 'Copy',
+      copied: 'Copied',
+      failed: 'Ctrl+C',
+      installLabel: 'Copy install command',
+      launchLabel: 'Copy launch command',
+      installCopied: 'Install command copied to clipboard.',
+      launchCopied: 'Launch command copied to clipboard.',
+      failedAnnouncement:
+        'Could not copy automatically. The command is selected; press Control C to copy it.',
+    },
   },
 
   openSource: {
-    workingTitle: 'Open source',
+    kicker: '[ 07 · OPEN SOURCE ]',
+    heading: 'The implementation is public.',
     body:
-      'The source code, architecture, release history and technical write-up are public. Kuyfi ' +
-      'is released under the MIT license and its current limitations are documented alongside ' +
-      'the implementation.',
+      'The source code, architecture, release history and technical write-up are available ' +
+      'publicly. Kuyfi {version} is released under the {license} license.',
+    linksLabel: 'Where to read it',
+    links: {
+      github: { label: 'Source code', detail: 'GitHub repository' },
+      writeup: { label: 'Technical write-up', detail: 'GitHub, docs folder' },
+      npm: { label: 'npm package', detail: 'npm registry' },
+    },
+    status: {
+      heading: 'Release status',
+      rows: {
+        release: 'RELEASE',
+        package: 'PACKAGE',
+        node: 'NODE',
+        license: 'LICENSE',
+        tests: 'TESTS',
+      },
+      testsNote: 'Kuyfi product tests passing for {version}',
+      validated: 'MANUALLY VALIDATED',
+      notValidated: 'NOT MANUALLY VALIDATED',
+      forRelease: 'for {version}',
+      network: 'Documented audit evidence in this release uses Stellar Testnet.',
+      limitations:
+        'Current release notes and documented limitations are available in the public repository.',
+    },
   },
 
   updates: {

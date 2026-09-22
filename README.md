@@ -5,8 +5,8 @@ for Soroban.
 
 **Status:** early build. Foundation, visual tokens, the scroll-driven hero, the core narrative
 (What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey), a static page atmosphere,
-the real CLI terminal and the Evidence section (three records built from `content/evidence.ts`).
-Not deployed.
+the real CLI terminal, the Evidence section (three records built from `content/evidence.ts`),
+Install, and Open Source with the v0.1.0 release status (`content/releaseStatus.ts`). Not deployed.
 
 `Kuyfi_landing_v2` (a sibling folder in the workspace) is the visual reference prototype and is
 left untouched.

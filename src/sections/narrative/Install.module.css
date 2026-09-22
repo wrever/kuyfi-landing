@@ -1,0 +1,111 @@
+.head {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 14ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── The command block ─────────────────────────────────────────
+ * Same language as the terminal: ink-deep, hairline border, 2px radius, a gold edge light along the
+ * top, and a gold glow behind it that stays inside the section padding.
+ */
+.commands {
+  position: relative;
+  margin-top: var(--space-8);
+}
+
+.commands::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * min(34%, var(--section-y) * 0.8)) -10%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(var(--gold-rgb) / 0.16),
+    transparent 100%
+  );
+}
+
+.block {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-deep);
+  box-shadow: 0 36px 70px -34px rgb(0 0 0 / 0.9);
+}
+
+.block::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--gold-rgb) / 0.75) 30%,
+    rgb(var(--gold-rgb) / 0.75) 70%,
+    transparent
+  );
+}
+
+/* ── Requirement and package metadata ──────────────────────── */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5) var(--space-6);
+  margin-top: var(--space-6);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-7);
+  margin: 0;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.facts dd {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: end;
+  }
+}

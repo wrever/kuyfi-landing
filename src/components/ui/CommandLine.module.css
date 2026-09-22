@@ -1,0 +1,77 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4);
+}
+
+.row + .row {
+  border-top: 1px solid var(--line);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.note {
+  font-size: var(--fs-sm);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.command {
+  display: flex;
+  flex: 1 1 14rem;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(1.0625rem, 0.6rem + 1.9vw, 1.75rem);
+}
+
+.prompt {
+  color: var(--gold);
+  user-select: none;
+}
+
+/* The command is never wrapped or shrunk: if it is ever wider than its row it scrolls inside it. */
+.code {
+  min-width: 0;
+  overflow-x: auto;
+  color: var(--text);
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+
+.copy {
+  flex: none;
+  min-width: 6rem;
+}
+
+@media (max-width: 559px) {
+  .copy {
+    width: 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .row {
+    padding: var(--space-6) var(--space-6);
+  }
+}

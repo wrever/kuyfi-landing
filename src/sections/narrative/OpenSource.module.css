@@ -1,0 +1,247 @@
+/* ── Top: editorial text, and links set like documentation rows ── */
+.top {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 20ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+.links {
+  min-width: 0;
+}
+
+.linksLabel {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--purple-text);
+}
+
+.linkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-strong);
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.linkText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.linkLabel {
+  font-size: var(--fs-lead);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.linkUrl {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+/* Up-right arrow: it leaves the page. */
+.arrow {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--text-3);
+  stroke-width: 1.2;
+  stroke-linecap: square;
+  transition:
+    stroke var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out);
+}
+
+.link:hover .linkLabel {
+  color: var(--gold);
+}
+
+.link:hover .arrow {
+  stroke: var(--gold);
+  transform: translate(2px, -2px);
+}
+
+/* ── Status: a spec sheet, hairlines only ──────────────────────
+ * Opens on a line with a node and a registration cross, like the evidence records.
+ */
+.status {
+  position: relative;
+  margin-top: var(--space-9);
+  padding-top: var(--space-7);
+  border-top: 1px solid var(--line-strong);
+}
+
+.status::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 1px;
+  background: var(--ink);
+}
+
+.status::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 0;
+  width: 13px;
+  height: 13px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) center / 100% 1px no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) center / 1px 100% no-repeat;
+}
+
+.statusHeading {
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--purple-text);
+}
+
+.rows {
+  display: grid;
+}
+
+.column {
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 8.5rem) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.row dt {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.row dd {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.detail {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* Validation: the words state it; the marker repeats it as a shape.
+ * Filled square in gold = validated by hand. Dashed hollow square in purple = not validated. */
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  letter-spacing: 0.04em;
+}
+
+.marker {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+.state[data-validation='validated'] {
+  color: var(--text);
+}
+
+.state[data-validation='validated'] .marker {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+.state[data-validation='not-validated'] {
+  color: var(--purple-text);
+}
+
+.state[data-validation='not-validated'] .marker {
+  border-style: dashed;
+}
+
+.notes {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 62ch;
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  .top {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: center;
+  }
+
+  /* The release on the left; tests and platforms on the right. Each column takes its own heights. */
+  .rows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-9);
+    align-items: start;
+  }
+}
