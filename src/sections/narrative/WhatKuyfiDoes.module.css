@@ -1,0 +1,112 @@
+.split {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 16ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── Flow: a rail with three nodes, like a documentation outline ── */
+.flow {
+  --node: 9px;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--space-1);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 0 var(--space-7) var(--space-6);
+  border-left: 1px solid var(--line-strong);
+}
+
+.step:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+/* Node on the rail. */
+.step::before {
+  content: '';
+  position: absolute;
+  top: 0.32rem;
+  left: calc(var(--node) / -2 - 0.5px);
+  width: var(--node);
+  height: var(--node);
+  border: 1px solid var(--line-strong);
+  border-radius: 1px;
+  background: var(--ink);
+}
+
+/* The last node is the outcome, so it is the one gold mark. */
+.step:last-child::before {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+/* Arrowhead at the end of each rail segment, pointing into the next node. */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -4px;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  background: var(--ink);
+  transform: rotate(45deg);
+}
+
+.term {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-label);
+  color: var(--text);
+}
+
+.step:last-child .term {
+  color: var(--gold);
+}
+
+.detail {
+  max-width: 38ch;
+  font-size: var(--fs-base);
+  color: var(--text-3);
+}
+
+@media (min-width: 900px) {
+  .split {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  /* Sits a little below the heading's top edge so the two columns do not start on one line. */
+  .visual {
+    padding-top: var(--space-8);
+  }
+}

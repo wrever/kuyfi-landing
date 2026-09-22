@@ -1,0 +1,44 @@
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.heading {
+  max-width: 20ch;
+  font-size: var(--fs-display);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+}
+
+.body {
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* Secondary point: set apart by a purple rule, not by a box. */
+.note {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--purple);
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  .prose {
+    /* Columns 6 to 12 of a 12 column grid: the text hangs off the right of the heading. */
+    max-width: 34rem;
+    margin-top: var(--space-9);
+    margin-left: calc(41.667% + var(--space-4));
+  }
+}

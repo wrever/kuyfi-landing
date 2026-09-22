@@ -1,0 +1,220 @@
+.head {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 18ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── Pipeline ─────────────────────────────────────────────────
+ * Stacked (default): one row per step, rail down the left.
+ * Wide (>= 1080px): six columns, rail across the top.
+ */
+.pipeline {
+  --node: 9px;
+  list-style: none;
+  margin: var(--space-8) 0 0;
+  padding: 0;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--node) minmax(0, 1fr);
+  grid-template-areas:
+    'rail meta'
+    'rail label';
+  column-gap: var(--space-5);
+  row-gap: var(--space-1);
+  padding-bottom: var(--space-6);
+}
+
+.step:last-child {
+  padding-bottom: 0;
+}
+
+.rail {
+  grid-area: rail;
+  position: relative;
+}
+
+.node {
+  position: absolute;
+  top: 0.25rem;
+  left: 0;
+  width: var(--node);
+  height: var(--node);
+  border: 1px solid var(--line-strong);
+  border-radius: 1px;
+  background: var(--ink);
+}
+
+/* The two ends of the pipeline, input and output, are the gold marks. */
+.nodeEnd {
+  border-color: var(--gold);
+}
+
+.step:last-child .node {
+  background: var(--gold);
+}
+
+/* Connector: drawn by --p (0 to 1) from the node to the next one. */
+.connector {
+  --p: 1;
+  position: absolute;
+  top: calc(0.25rem + var(--node) + 5px);
+  bottom: calc(-1 * (var(--space-6) + 0.25rem - 5px));
+  left: calc(var(--node) / 2 - 0.5px);
+  width: 1px;
+  background: var(--line-strong);
+  transform: scaleY(var(--p));
+  transform-origin: top;
+}
+
+.meta {
+  grid-area: meta;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  min-height: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.index {
+  color: var(--text-3);
+}
+
+.stage {
+  color: var(--purple-text);
+}
+
+.label {
+  grid-area: label;
+  max-width: 34ch;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.step:last-child .label {
+  color: var(--gold);
+}
+
+/* Tablet: rows read like a table, label left and stage on the same line. */
+@media (min-width: 640px) {
+  .step {
+    grid-template-columns: var(--node) 3.25rem minmax(0, 1fr) 11rem;
+    grid-template-areas: 'rail index label stage';
+    align-items: baseline;
+    padding-bottom: var(--space-6);
+  }
+
+  .meta {
+    display: contents;
+  }
+
+  .index {
+    grid-area: index;
+  }
+
+  .stage {
+    grid-area: stage;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    letter-spacing: var(--tracking-label);
+    text-align: right;
+  }
+
+  .label {
+    max-width: none;
+  }
+
+  .rail {
+    align-self: stretch;
+  }
+}
+
+@media (min-width: 1080px) {
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    margin-top: var(--space-9);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: 0 var(--space-4) 0 0;
+  }
+
+  .rail {
+    order: -1;
+    height: var(--node);
+  }
+
+  .node {
+    top: 0;
+  }
+
+  .connector {
+    top: calc(var(--node) / 2 - 0.5px);
+    bottom: auto;
+    left: calc(var(--node) + 6px);
+    right: 6px;
+    width: auto;
+    height: 1px;
+    transform: scaleX(var(--p));
+    transform-origin: left;
+  }
+
+  .meta {
+    display: flex;
+    order: 0;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-height: 2.75rem;
+  }
+
+  .stage {
+    text-align: left;
+  }
+
+  .label {
+    order: 1;
+    max-width: 22ch;
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: end;
+  }
+}

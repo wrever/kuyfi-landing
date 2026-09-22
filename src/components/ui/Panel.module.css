@@ -1,0 +1,75 @@
+.panel {
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-raised);
+  font-family: var(--font-mono);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--text-2);
+}
+
+/* Rectangular tag (2px radius, not a pill): the panel is an example, and says so. */
+.tag {
+  padding: 2px var(--space-2);
+  border: 1px solid rgb(var(--purple-rgb) / 0.7);
+  border-radius: var(--radius);
+  color: var(--purple-text);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.group + .group {
+  border-top: 1px solid var(--line);
+}
+
+.groupLabel {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.note {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-4);
+}
+
+@media (min-width: 640px) {
+  .head,
+  .group,
+  .note {
+    padding-inline: var(--space-5);
+  }
+
+  .group {
+    padding-block: var(--space-5);
+  }
+}

@@ -1,0 +1,117 @@
+.layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+}
+
+.body {
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* The lesson from the real audits, so it is set in full text colour and separated by a rule. */
+.emphasis {
+  max-width: 48ch;
+  margin-top: var(--space-2);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line-strong);
+  font-size: var(--fs-lead);
+  color: var(--text);
+  text-wrap: pretty;
+}
+
+/* ── Panel content ─────────────────────────────────────────── */
+.families,
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.families {
+  gap: var(--space-3);
+}
+
+.family {
+  display: flex;
+  flex-direction: column;
+}
+
+.familyName {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.familyDetail {
+  margin: 0;
+  color: var(--text-3);
+}
+
+.rows {
+  gap: var(--space-2);
+}
+
+.row {
+  display: grid;
+  gap: 0 var(--space-5);
+}
+
+.rowKey {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  color: var(--text-3);
+}
+
+.rowValue,
+.rowResult {
+  margin: 0;
+}
+
+.rowValue {
+  color: var(--text);
+}
+
+/* The outcome of the example, and the one gold mark in the panel. */
+.rowResult {
+  color: var(--gold);
+}
+
+@media (min-width: 640px) {
+  .family {
+    flex-direction: row;
+    gap: var(--space-5);
+  }
+
+  .familyName {
+    flex: 0 0 10.5rem;
+  }
+
+  .row {
+    grid-template-columns: 10.5rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-9);
+    align-items: center;
+  }
+}

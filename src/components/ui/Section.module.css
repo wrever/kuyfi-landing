@@ -1,0 +1,12 @@
+/* Same ink as the end of the hero: sections start on it with no seam, so there is nothing to hide. */
+.section {
+  position: relative;
+  padding: var(--section-y) var(--gutter);
+  background: var(--ink);
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+}

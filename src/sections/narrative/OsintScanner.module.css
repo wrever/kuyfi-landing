@@ -1,0 +1,130 @@
+.layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+}
+
+.body {
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* One line under the prose, in the panel's own register. */
+.support {
+  max-width: 48ch;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-3);
+  text-wrap: balance;
+}
+
+/* ── Panel content ─────────────────────────────────────────── */
+.spec {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-1) var(--space-5);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+
+.spec dt {
+  color: var(--text-3);
+}
+
+.spec dd {
+  margin: 0;
+  color: var(--text);
+}
+
+.functions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+}
+
+.fn {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.fnHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+}
+
+.fnName {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.returns {
+  color: var(--text-3);
+}
+
+.arrow {
+  color: var(--gold);
+}
+
+.args {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--line);
+  color: var(--text-3);
+}
+
+.arg {
+  white-space: nowrap;
+}
+
+.kind {
+  color: var(--text-3);
+}
+
+.type {
+  color: var(--purple-text);
+}
+
+.udt {
+  color: var(--gold);
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: center;
+  }
+
+  /* Reverse of Chaos Monkey: the panel comes first, on the left. */
+  .visual {
+    order: -1;
+  }
+}
