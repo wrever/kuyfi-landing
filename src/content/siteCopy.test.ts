@@ -125,6 +125,7 @@ describe('core narrative', () => {
     siteCopy.howItWorks,
     siteCopy.osintScanner,
     siteCopy.chaosMonkey,
+    siteCopy.terminal,
   ]
 
   it('gives every section a bracketed label and a heading', () => {

@@ -1,0 +1,39 @@
+.layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 14ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 44ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* Grid items default to min-content; without this a wide transcript would stretch the page. */
+.visual {
+  min-width: 0;
+}
+
+@media (min-width: 1000px) {
+  .layout {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-9);
+    align-items: center;
+  }
+}

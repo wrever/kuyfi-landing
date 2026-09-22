@@ -3,8 +3,9 @@
 Official landing page for [Kuyfi](https://github.com/alex0tico/kuyfi) — native black-box security
 for Soroban.
 
-**Status:** early build. Foundation, visual tokens, the scroll-driven hero and the core narrative
-(What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey). Not deployed.
+**Status:** early build. Foundation, visual tokens, the scroll-driven hero, the core narrative
+(What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey), a static page atmosphere and
+the real CLI terminal. Not deployed.
 
 `Kuyfi_landing_v2` (a sibling folder in the workspace) is the visual reference prototype and is
 left untouched.
@@ -35,7 +36,8 @@ src/
   hooks/        reusable hooks
   lib/          pure logic (heroTimeline, tested)
   config/       site-wide constants (links, version, install command)
-  content/      typed content sources of truth (siteCopy, interfaceExamples, evidence)
+  content/      typed content sources of truth (siteCopy, interfaceExamples, evidence,
+                terminalSession: the real CLI transcript, with its provenance)
   styles/       design tokens, reset, globals
   assets/       bundled media (hashed by Vite)
 public/         static files served as-is

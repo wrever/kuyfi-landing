@@ -2,7 +2,7 @@ import { site } from '../config/site'
 
 /**
  * Landing copy: central editorial source. Rendered so far: `hero` and the core narrative
- * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`). Later sections are
+ * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`). Later sections are
  * still draft direction.
  *
  * Style guide (enforced by siteCopy.test.ts):
@@ -142,6 +142,20 @@ export const siteCopy = {
       ],
       note: 'Illustrative values. A signal is not a confirmed vulnerability.',
     },
+  },
+
+  terminal: {
+    kicker: '[ 04 · REAL CLI ]',
+    heading: 'Kuyfi, from the terminal.',
+    body:
+      'Kuyfi runs locally from the command line. The session below is the same interface you ' +
+      'install with @kuyfi/kuyfi: choose the OSINT Scanner, enter a Contract ID and read the ' +
+      'attack surface it reconstructs.',
+    region: 'Real Kuyfi CLI session',
+    sessionTag: 'REAL CLI SESSION',
+    note:
+      "Excerpt from a scan of Kuyfi's own intentionally vulnerable Testnet fixture. The scan is " +
+      'read-only and submits no transactions.',
   },
 
   reporting: {

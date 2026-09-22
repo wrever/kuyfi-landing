@@ -1,0 +1,247 @@
+/*
+ * Terminal: Kuyfi's own visual language (ink, thin border, 2px radius, gold, purple, IBM Plex Mono),
+ * not a desktop-window imitation. No traffic lights, no rounded chrome, no green.
+ * Roles map the colours the real TUI (Ink) applies to each token onto the site palette:
+ *   magenta -> purple, cyan and yellow -> gold, green -> gold, gray -> muted text.
+ */
+.terminal {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-mono);
+}
+
+/* Local light: the strongest one on the page. Every ellipse stays inside this box and reaches alpha 0
+ * before its edge, and the box stays inside the section padding, so nothing is cut. */
+.terminal::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * min(26%, var(--section-y) * 0.8)) -18%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgb(var(--gold-rgb) / 0.26), transparent 100%),
+    radial-gradient(ellipse 30% 30% at 30% 70%, rgb(var(--purple-rgb) / 0.32), transparent 100%);
+}
+
+.window {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-deep);
+  box-shadow:
+    0 1px 0 rgb(var(--text-rgb) / 0.04) inset,
+    0 36px 70px -34px rgb(0 0 0 / 0.9);
+}
+
+/* Gold edge light along the top, fading out at both ends. */
+.window::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--gold-rgb) / 0.75) 30%,
+    rgb(var(--gold-rgb) / 0.75) 70%,
+    transparent
+  );
+}
+
+/* ── Header: identity left, network and session tag right. Wraps and stacks on narrow screens. ── */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.identity,
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+}
+
+.product {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.version,
+.network {
+  color: var(--text-3);
+}
+
+/* A package name is lowercase; do not let the header's uppercase style rewrite it. */
+.version {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Rectangular tag, same as the panels', but the session is real. */
+.tag {
+  padding: 2px var(--space-2);
+  border: 1px solid rgb(var(--purple-rgb) / 0.7);
+  border-radius: var(--radius);
+  color: var(--purple-text);
+}
+
+/* ── Transcript ────────────────────────────────────────────── */
+.screen {
+  overflow-x: auto;
+  padding: var(--space-5) var(--space-4);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-2);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+/* The window clips its children, so the focus ring sits inside the scroll area. */
+.screen:focus-visible {
+  outline-offset: -3px;
+}
+
+.transcript {
+  width: max-content;
+  min-width: 100%;
+}
+
+.block + .block {
+  margin-top: var(--space-4);
+}
+
+.line {
+  display: block;
+  white-space: pre;
+}
+
+.blank {
+  min-height: 1.7em;
+}
+
+/* What the user did between two screens: annotation, not CLI output. */
+.caption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-4);
+}
+
+.caption::after {
+  content: '';
+  flex: 1;
+  min-width: var(--space-6);
+  height: 1px;
+  background: var(--line);
+}
+
+/* ── Token roles ───────────────────────────────────────────── */
+.prompt,
+.brand,
+.arrow {
+  color: var(--purple-text);
+}
+
+.brand {
+  font-weight: 500;
+}
+
+.command,
+.strong,
+.fn {
+  color: var(--text);
+}
+
+.command,
+.fn,
+.selected {
+  font-weight: 500;
+}
+
+.selected {
+  color: var(--text);
+}
+
+.accent,
+.id,
+.ok {
+  color: var(--gold);
+}
+
+.dim,
+.punct,
+.muted {
+  color: var(--text-3);
+}
+
+.ret {
+  color: var(--text-2);
+}
+
+.void {
+  color: var(--text-4);
+}
+
+/* ── Note ──────────────────────────────────────────────────── */
+.note {
+  padding-top: var(--space-3);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-4);
+  text-wrap: pretty;
+}
+
+/* ── Reveal: opacity and a 3px rise, once, in transcript order ──
+ * Lines are only hidden while data-state is "pending", i.e. until the terminal enters the viewport.
+ * The text is in the DOM the whole time. Reduced motion and print show everything immediately.
+ */
+.terminal[data-state='pending'] .line,
+.terminal[data-state='pending'] .caption {
+  opacity: 0;
+  transform: translateY(3px);
+}
+
+.terminal[data-state='shown'] .line,
+.terminal[data-state='shown'] .caption {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 420ms var(--ease-out) calc(var(--i, 0) * 55ms),
+    transform 420ms var(--ease-out) calc(var(--i, 0) * 55ms);
+}
+
+@media (prefers-reduced-motion: reduce), print {
+  .terminal .line,
+  .terminal .caption {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .bar {
+    padding-inline: var(--space-5);
+  }
+
+  .screen {
+    padding: var(--space-6) var(--space-5);
+    font-size: 0.875rem;
+  }
+}

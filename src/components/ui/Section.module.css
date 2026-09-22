@@ -93,3 +93,20 @@
     transparent 100%
   );
 }
+
+/* ── Terminal: the next strong moment after the hero ──
+ * Gold light behind the terminal, purple low on the left, and the technical grid revealed around it.
+ */
+.terminal {
+  --atmos-glow:
+    radial-gradient(ellipse 54% 44% at 66% 50%, rgb(var(--gold-rgb) / 0.075), transparent 100%),
+    radial-gradient(ellipse 40% 32% at 20% 66%, rgb(var(--purple-rgb) / 0.1), transparent 100%);
+  --atmos-window: radial-gradient(ellipse 64% 46% at 64% 50%, transparent 0%, var(--ink) 100%);
+  --atmos-grid:
+    radial-gradient(circle at 0 0, rgb(var(--text-rgb) / 0.2) 0 1px, transparent 1.5px) 0 0 /
+      var(--grid-step) var(--grid-step),
+    linear-gradient(90deg, rgb(var(--text-rgb) / 0.05) 1px, transparent 1px) 0 0 / var(--grid-step)
+      var(--grid-step),
+    linear-gradient(rgb(var(--text-rgb) / 0.05) 1px, transparent 1px) 0 0 / var(--grid-step)
+      var(--grid-step);
+}
