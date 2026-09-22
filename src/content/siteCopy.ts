@@ -328,9 +328,17 @@ export const siteCopy = {
       'publicly. Kuyfi {version} is released under the {license} license.',
     linksLabel: 'Where to read it',
     links: {
-      github: { label: 'Source code', detail: 'GitHub repository' },
-      writeup: { label: 'Technical write-up', detail: 'GitHub, docs folder' },
-      npm: { label: 'npm package', detail: 'npm registry' },
+      github: { label: 'SOURCE CODE', name: 'GitHub', accessibleName: 'Source code on GitHub' },
+      writeup: {
+        label: 'TECHNICAL WRITE-UP',
+        name: 'Read the technical write-up',
+        accessibleName: 'Read the technical write-up on GitHub',
+      },
+      npm: {
+        label: 'NPM PACKAGE',
+        name: '@kuyfi/kuyfi',
+        accessibleName: 'The @kuyfi/kuyfi package on npm',
+      },
     },
     status: {
       heading: 'Release status',

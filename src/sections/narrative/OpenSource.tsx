@@ -10,13 +10,20 @@ const { openSource: copy } = siteCopy
 const { status } = copy
 const values = { version: `v${releaseStatus.release}`, license: releaseStatus.license }
 
-/** The URL as people read it: no scheme, no www. The link itself keeps the full address. */
-const shown = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '')
+/**
+ * Short context under a link: the host, and for the repository its path too. It is metadata, not the
+ * link text, so a long address never becomes the dominant thing on a phone. The href is untouched.
+ */
+function context(url: string, withPath = false): string {
+  const { hostname, pathname } = new URL(url)
+  return hostname.replace(/^www\./, '') + (withPath ? pathname : '')
+}
 
+const { github, writeup, npm } = releaseStatus.links
 const links = [
-  { ...copy.links.github, href: releaseStatus.links.github },
-  { ...copy.links.writeup, href: releaseStatus.links.writeup },
-  { ...copy.links.npm, href: releaseStatus.links.npm },
+  { ...copy.links.github, href: github, meta: context(github, true) },
+  { ...copy.links.writeup, href: writeup, meta: context(writeup) },
+  { ...copy.links.npm, href: npm, meta: context(npm) },
 ]
 
 function PlatformValue({ platform }: { platform: Platform }) {
@@ -55,15 +62,12 @@ export function OpenSource() {
           <ul className={styles.linkList} role="list">
             {links.map((link) => (
               <li key={link.href}>
-                <a
-                  className={styles.link}
-                  href={link.href}
-                  aria-label={`${link.label}, ${link.detail}`}
-                >
+                <a className={styles.link} href={link.href} aria-label={link.accessibleName}>
                   <span className={styles.linkText}>
-                    <span className={styles.linkLabel}>{link.label}</span>
+                    <span className={styles.linkKind}>{link.label}</span>
+                    <span className={styles.linkLabel}>{link.name}</span>
                     <span className={styles.linkUrl} aria-hidden="true">
-                      {shown(link.href)}
+                      {link.meta}
                     </span>
                   </span>
                   <svg className={styles.arrow} viewBox="0 0 12 12" aria-hidden="true">
