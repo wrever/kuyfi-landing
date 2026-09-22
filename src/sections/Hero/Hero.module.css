@@ -199,7 +199,7 @@
 }
 
 .lede {
-  max-width: 44ch;
+  max-width: 60ch;
   font-size: var(--fs-lead);
   color: var(--text-2);
   text-wrap: pretty;
@@ -300,8 +300,13 @@
     font-size: clamp(3rem, 16vw, 4.5rem);
   }
 
+  .inner {
+    gap: var(--space-3);
+  }
+
   .lede {
-    font-size: var(--fs-base);
+    font-size: 0.9375rem;
+    line-height: 1.5;
   }
 
   .hint {

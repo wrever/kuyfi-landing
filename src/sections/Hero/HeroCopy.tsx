@@ -2,6 +2,7 @@ import { m, type MotionStyle } from 'motion/react'
 import { ButtonLink } from '../../components/ui/Button'
 import { CopyCommand } from '../../components/ui/CopyCommand'
 import { site } from '../../config/site'
+import { siteCopy } from '../../content/siteCopy'
 import styles from './Hero.module.css'
 
 interface HeroCopyProps {
@@ -11,6 +12,8 @@ interface HeroCopyProps {
 }
 
 export function HeroCopy({ wordmarkStyle, copyStyle }: HeroCopyProps) {
+  const { hero } = siteCopy
+
   return (
     <div className={styles.content}>
       <div className={styles.inner}>
@@ -18,22 +21,19 @@ export function HeroCopy({ wordmarkStyle, copyStyle }: HeroCopyProps) {
           KUYFI
         </m.p>
         <m.div className={styles.copy} style={copyStyle}>
-          <p className={styles.status}>v{site.version} · Open source</p>
+          <p className={styles.status}>{hero.eyebrow}</p>
           <h1 id="hero-title" className={styles.headline}>
-            Native black-box security for Soroban.
+            {hero.headline}
           </h1>
-          <p className={styles.lede}>
-            Analyze deployed Soroban contracts from their on-chain interface, without requiring
-            source code.
-          </p>
+          <p className={styles.lede}>{hero.lede}</p>
           <div className={styles.actions}>
             <CopyCommand command={site.installCommand} />
             <ButtonLink variant="secondary" href={site.githubUrl}>
-              View on GitHub
+              {hero.githubCta}
             </ButtonLink>
           </div>
           <p className={styles.hint}>
-            Then run <code>{site.cliCommand}</code> ·{' '}
+            {hero.thenRun} <code>{site.cliCommand}</code> ·{' '}
             <span className={styles.slogan}>{site.slogan}</span>
           </p>
         </m.div>
