@@ -1,0 +1,290 @@
+/*
+ * Hero layout. Desktop composition is a faithful port of Kuyfi_landing_v2:
+ * an oversized "camera" (inset -6%) that is scaled around the keyhole while the stage stays sticky.
+ * Portrait / square viewports switch to the "band" composition (see the media query at the bottom).
+ */
+
+/* ── Rig: scroll distance = --rig-length − 100svh ─────────── */
+.rig {
+  --rig-length: 210svh;
+  position: relative;
+  height: var(--rig-length);
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+/* Reduced motion / short landscape screens: a plain, static, one-screen composition. */
+.rigStatic {
+  position: relative;
+}
+
+.stageStatic {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+/* ── Camera: what the scroll zooms ─────────────────────────── */
+.camera {
+  --camera-shift: 6%;
+  position: absolute;
+  inset: -6%;
+  transform-origin: 72% 46%; /* the keyhole, as in v2 */
+  will-change: transform;
+}
+
+.cameraStatic {
+  transform: translate3d(var(--camera-shift), 0, 0);
+  will-change: auto;
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Legibility + bloom ───────────────────────────────────── */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgb(var(--ink-rgb) / 0.92) 0%,
+      rgb(var(--ink-rgb) / 0.72) 26%,
+      rgb(var(--ink-rgb) / 0) 58%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(var(--ink-rgb) / 0.6) 0%,
+      rgb(var(--ink-rgb) / 0) 30%,
+      rgb(var(--ink-rgb) / 0.75) 100%
+    );
+}
+
+.bloom {
+  --bloom-x: 65%;
+  --bloom-y: 50%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    85% 85% at var(--bloom-x) var(--bloom-y),
+    var(--bloom-1) 0%,
+    var(--bloom-2) 38%,
+    var(--bloom-3) 78%,
+    var(--bloom-4) 100%
+  );
+}
+
+/* Gold haze at the top of whatever follows the hero: continuity out of the bloom. */
+.handoff {
+  position: relative;
+  z-index: 1;
+  height: 0;
+  pointer-events: none;
+}
+
+.handoff::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 46svh;
+  background: linear-gradient(
+    180deg,
+    rgb(var(--bloom-1-rgb) / 0.5) 0%,
+    rgb(var(--gold-rgb) / 0.22) 22%,
+    rgb(var(--purple-rgb) / 0.1) 55%,
+    rgb(var(--ink-rgb) / 0) 100%
+  );
+}
+
+/* ── Copy ─────────────────────────────────────────────────── */
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 5rem var(--gutter) 8svh;
+  pointer-events: none;
+}
+
+.stageStatic .content {
+  position: relative;
+  min-height: 100svh;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.625rem;
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--fs-wordmark);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-shadow: 0 0 90px rgb(var(--gold-rgb) / 0.28);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  pointer-events: auto;
+}
+
+.status {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.headline {
+  max-width: 22ch;
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.lede {
+  max-width: 44ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: stretch;
+  margin-top: var(--space-2);
+}
+
+.hint {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+.hint code {
+  color: var(--text);
+}
+
+.slogan {
+  color: var(--gold);
+}
+
+/* ── Portrait / square: "band" composition (prototype) ────────
+ * In a tall viewport `cover` would crop the scene to ~26% of its width and lose the cat or the
+ * keyhole. Instead the artwork is shown as a 16:9 band anchored to the bottom, cropped to
+ * x ≈ 15–75% of the frame (cat on the left, keyhole on the right), with the copy above it on ink.
+ * Video and frames share the band, so they scale together around the keyhole.
+ */
+@media (max-aspect-ratio: 1/1) {
+  .rig {
+    --rig-length: 200svh;
+  }
+
+  .camera {
+    --camera-shift: 0%;
+    inset: auto auto 0 -25%;
+    width: 166.667%; /* 100% / 0.60 visible width */
+    aspect-ratio: 1672 / 941;
+    /*
+     * Zoom origin. A fixed origin at the keyhole would pin it to the bottom-right corner while it
+     * grows. Instead the origin sits on the line from screen centre through the keyhole, so that at
+     * full dive (scale 4.4 = DIVE_MAX) the keyhole has travelled to the centre of the screen:
+     *   O = (4.4·P − C) / 3.4, with P = keyhole (84vw, 100svh − 51.56vw) and C = screen centre.
+     * Expressed relative to the band: x = 71.4%, y = 14.7svh + 27.05vw. Keep in sync with DIVE_MAX.
+     */
+    transform-origin: 71.4% calc(14.7svh + 27.05vw);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 26%);
+  }
+
+  .scrim {
+    background:
+      linear-gradient(
+        180deg,
+        rgb(var(--ink-rgb) / 0.94) 0%,
+        rgb(var(--ink-rgb) / 0.8) 40%,
+        rgb(var(--ink-rgb) / 0) 68%
+      ),
+      linear-gradient(0deg, rgb(var(--ink-rgb) / 0.5) 0%, rgb(var(--ink-rgb) / 0) 25%);
+  }
+
+  .bloom {
+    /* Halfway along the keyhole's path (keyhole start ↔ screen centre) while the flood appears. */
+    --bloom-x: 67%;
+    --bloom-y: calc(75svh - 25.8vw);
+  }
+
+  .content {
+    align-items: flex-start;
+    padding: max(var(--space-6), env(safe-area-inset-top)) var(--gutter) var(--space-6);
+  }
+
+  .inner {
+    gap: var(--space-4);
+  }
+
+  .wordmark {
+    font-size: clamp(3.5rem, 21vw, 6.5rem);
+  }
+
+  .headline {
+    font-size: clamp(1.625rem, 7.4vw, 2.25rem);
+  }
+
+  .actions {
+    flex-direction: column;
+    max-width: 32rem;
+  }
+}
+
+/* Short portrait screens (e.g. 375×667): give the artwork room. */
+@media (max-aspect-ratio: 1/1) and (max-height: 720px) {
+  .wordmark {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+
+  .lede {
+    font-size: var(--fs-base);
+  }
+
+  .hint {
+    display: none;
+  }
+}

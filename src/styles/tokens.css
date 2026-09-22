@@ -20,6 +20,7 @@
 
   /* Hero "bloom" flood (kept from the v2 prototype) */
   --bloom-1: #ffe9a8;
+  --bloom-1-rgb: 255 233 168;
   --bloom-2: #f0c21f;
   --bloom-3: #c08c05;
   --bloom-4: #6b4e03;

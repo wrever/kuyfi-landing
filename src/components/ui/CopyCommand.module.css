@@ -1,0 +1,43 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap; /* last resort on very narrow screens: the button drops below, nothing is clipped */
+  align-items: stretch;
+  max-width: 100%;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: rgb(var(--ink-rgb) / 0.72);
+}
+
+.prompt {
+  display: grid;
+  place-items: center;
+  padding-left: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--gold);
+  user-select: none;
+}
+
+.code {
+  display: flex;
+  flex: 1000 1 auto; /* takes (almost) all free space so the button stays compact */
+  align-items: center;
+  min-width: 0;
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-2);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  /* Slightly smaller on narrow phones so the whole command fits next to the button (≥360px). */
+  font-size: clamp(0.75rem, 3.3vw, var(--fs-sm));
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* The primary button sits flush inside the bar's right edge. Fixed width: "Copy"/"Copied"/"Ctrl+C". */
+.copy {
+  flex: 1 0 auto;
+  margin: -1px;
+  min-width: 5rem;
+  padding: 0 var(--space-3);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
