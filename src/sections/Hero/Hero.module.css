@@ -58,6 +58,11 @@
   inset: 0;
 }
 
+/* No box of its own, so the <img> inside lays out exactly as if it were still a direct child. */
+.picture {
+  display: contents;
+}
+
 .layer {
   position: absolute;
   inset: 0;
