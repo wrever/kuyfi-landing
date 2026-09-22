@@ -17,6 +17,9 @@
   --purple: #8e2f87; /* fills, borders, glows — only 2.6:1 on ink, never for text */
   --purple-rgb: 142 47 135;
   --purple-text: #d068c6; /* small text on ink, 5.8:1 */
+  /* The one warning tone. Only for a CRITICAL finding in the controlled fixture; 6.8:1 on ink. */
+  --critical: #ea7a6c;
+  --critical-rgb: 234 122 108;
   --plum: color-mix(in srgb, var(--purple) 35%, var(--ink)); /* dusk between gold and ink */
 
   /* Hero "bloom" flood (kept from the v2 prototype) */

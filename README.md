@@ -4,8 +4,9 @@ Official landing page for [Kuyfi](https://github.com/alex0tico/kuyfi) — native
 for Soroban.
 
 **Status:** early build. Foundation, visual tokens, the scroll-driven hero, the core narrative
-(What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey), a static page atmosphere and
-the real CLI terminal. Not deployed.
+(What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey), a static page atmosphere,
+the real CLI terminal and the Evidence section (three records built from `content/evidence.ts`).
+Not deployed.
 
 `Kuyfi_landing_v2` (a sibling folder in the workspace) is the visual reference prototype and is
 left untouched.
@@ -47,7 +48,8 @@ src/
   lib/          pure logic (heroTimeline, tested)
   config/       site-wide constants (links, version, install command)
   content/      typed content sources of truth (siteCopy, interfaceExamples, evidence,
-                terminalSession: the real CLI transcript, with its provenance)
+                terminalSession: the real CLI transcript, with its provenance;
+                evidenceRecords: facts from evidence.ts joined with the Evidence copy)
   styles/       design tokens, reset, globals
   assets/       bundled media (hashed by Vite)
 public/         static files served as-is

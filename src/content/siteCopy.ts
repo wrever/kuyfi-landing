@@ -2,7 +2,7 @@ import { site } from '../config/site'
 
 /**
  * Landing copy: central editorial source. Rendered so far: `hero` and the core narrative
- * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`). Later sections are
+ * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`, `evidence`). Later sections are
  * still draft direction.
  *
  * Style guide (enforced by siteCopy.test.ts):
@@ -17,8 +17,8 @@ import { site } from '../config/site'
  *   a coverage gap is not safety.
  * Never conclude that a contract is "secure", "safe", "fully audited" or has "no vulnerabilities".
  *
- * Evidence is intentionally absent. src/content/evidence.ts remains the source of truth, and no
- * numbers from it are surfaced until the Evidence section is designed deliberately.
+ * Evidence copy has no numbers on purpose. src/content/evidence.ts is the source of truth for every
+ * number and identifier; the section renders them from there, next to the words written here.
  *
  * `workingTitle` values (sections not built yet) come from the editorial brief and are not final
  * headings. Sample code for the interface panels (identifiers and types that contain digits) lives
@@ -157,6 +157,122 @@ export const siteCopy = {
       "Two unedited screens from a real session against Kuyfi's own intentionally vulnerable " +
       'Testnet fixture. Only the OSINT Scanner was run: it is read-only and submits no ' +
       'transactions.',
+  },
+
+  evidence: {
+    kicker: '[ 05 · EVIDENCE ]',
+    heading: 'Tested against real contracts, and against a contract designed to fail.',
+    intro:
+      'A security tool has to do more than surface errors. It also needs to tell uncertainty ' +
+      'apart from signal, make missing coverage visible and give a clear result when a known flaw ' +
+      'is present. Each record below shows one of those behaviors on Stellar Testnet.',
+    fields: {
+      context: 'CONTEXT',
+      observed: 'WHAT KUYFI OBSERVED',
+      reading: 'HOW TO READ IT',
+    },
+    labels: {
+      case: 'CASE',
+      network: 'Network',
+      contract: 'Contract',
+      target: 'Target',
+      functions: 'functions',
+      udts: 'user-defined types',
+      vectors: 'vectors exercised',
+      hashes: 'transactions with a hash',
+      broadcasts: 'broadcast transactions',
+      signals: 'findings/signals',
+      finding: 'finding',
+      generated: 'vectors generated',
+      severities: 'Signals by severity',
+      highSignals: 'HIGH signals on',
+      allSignalsAre: 'All findings/signals are',
+    },
+    copy: {
+      copyContract: 'Copy full contract ID of',
+      copyTransaction: 'Copy full transaction hash of the manual exploit on',
+      copy: 'Copy',
+      copied: 'Copied',
+      failed: 'Ctrl+C',
+      copiedAnnouncement: 'Copied to clipboard.',
+      failedAnnouncement:
+        'Could not copy automatically. The value is selected; press Control C to copy it.',
+    },
+    amm: {
+      kind: 'REAL CONTRACT',
+      outcome: 'MANUAL REVIEW',
+      title: 'AMM',
+      context:
+        'An automated market maker deployed by a third party on Stellar Testnet. Kuyfi rebuilt ' +
+        'its interface from the deployed contract alone, without source code.',
+      observed:
+        'Almost every result is an inconclusive failure that needs manual review. The HIGH ' +
+        'signals are heuristic and fall on getters that take an Address.',
+      reading:
+        'These are signals for manual review, not confirmed vulnerabilities. A getter that takes ' +
+        'an Address does not necessarily require that address to authorize the call, so a call ' +
+        'that is not rejected is not necessarily a flaw. A generated Address is type-correct, ' +
+        'but it is not necessarily an account, token or state-derived address that the function ' +
+        'expects. That is the difference between a type-correct value and a semantically valid ' +
+        'one described in the Chaos Monkey section. Kuyfi keeps the ambiguity visible instead of ' +
+        'turning every runtime failure into a vulnerability.',
+    },
+    passkey: {
+      kind: 'REAL CONTRACT',
+      outcome: 'COVERAGE GAP',
+      title: 'Passkey wallet',
+      context:
+        'A Testnet deployment attributed to the stellar/passkey-kit project. The deployed code ' +
+        'was not verified against the upstream source. A smart wallet is an authorization ' +
+        'system, so its most sensitive entry points depend on context supplied by the host ' +
+        'rather than on plain arguments.',
+      observed:
+        'Every finding is an inconclusive failure that needs manual review, and none was raised ' +
+        'as a heuristic vulnerability signal. One entry point received no vectors at all.',
+      gap: 'KNOWN COVERAGE GAP',
+      gapNote: 'This entry point was not exercised.',
+      gapVersion: 'did not generate a single vector for it.',
+      reading:
+        'This is a coverage gap. It does not mean the function rejected the inputs, is ' +
+        'protected or is vulnerable, because Kuyfi never called it. Exercising it meaningfully ' +
+        'means building a transaction in which the wallet is the authorizing party, which ' +
+        'current vector generation does not do. A security tool should make missing coverage ' +
+        'visible, and no result here says anything about that entry point.',
+    },
+    fixture: {
+      kind: 'POSITIVE CONTROL',
+      outcome: 'CRITICAL FINDING',
+      title: 'Intentionally vulnerable fixture',
+      context:
+        'A contract written to test Kuyfi, with an authorization check deliberately omitted ' +
+        'from one function. A guarded twin performs the same operation with the check in place.',
+      observed:
+        'Kuyfi raised a CRITICAL finding on the unguarded function. The guarded twin requires ' +
+        'authorization and did not produce the same finding.',
+      pair: {
+        check: 'Authorization check',
+        result: 'Result',
+        omitted: 'omitted on purpose',
+        required: 'required',
+        noFinding: 'no finding',
+      },
+      reading:
+        'The flaw was planted, so this is not a discovery. It is a positive control: it checks ' +
+        'that when a known authorization flaw is present, Kuyfi produces the expected strong ' +
+        'signal, and that the guarded twin does not. It shows how the mechanism behaves on a ' +
+        'controlled contract, not how often it detects flaws in other contracts.',
+      exploit: {
+        label: 'MANUAL EXPLOIT EVIDENCE',
+        text:
+          'Sent manually during development validation to confirm the flaw on Stellar Testnet. ' +
+          'This transaction was not generated by Kuyfi.',
+        transaction: 'Transaction',
+        ledger: 'Ledger',
+      },
+    },
+    closing:
+      'Three runs are not a measure of detection rate. A finding is a signal to review, and no ' +
+      'result on this page shows that a contract is free of vulnerabilities.',
   },
 
   reporting: {

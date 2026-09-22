@@ -1,0 +1,560 @@
+/* ── Head ───────────────────────────────────────────────────── */
+.head {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 20ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.intro {
+  max-width: 52ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── Records: a vertical evidence narrative, one hairline per record ──
+ * Each record opens on a line with a node at its left end (the pipeline's language) and a
+ * registration cross at its right end. The last record, the positive control, has the gold node.
+ */
+.records {
+  margin-top: var(--space-9);
+}
+
+.record {
+  position: relative;
+  padding: var(--space-8) 0 var(--space-9);
+  border-top: 1px solid var(--line-strong);
+}
+
+.record::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 1px;
+  background: var(--ink);
+}
+
+.record[data-tone='critical']::before {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+.record::after {
+  content: '';
+  position: absolute;
+  top: -7px;
+  right: 0;
+  width: 13px;
+  height: 13px;
+  background:
+    linear-gradient(var(--line-strong), var(--line-strong)) center / 100% 1px no-repeat,
+    linear-gradient(var(--line-strong), var(--line-strong)) center / 1px 100% no-repeat;
+}
+
+.recordHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  margin-bottom: var(--space-7);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.caseLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+.index {
+  color: var(--text-3);
+}
+
+.kind {
+  color: var(--text-2);
+}
+
+/* The positive control is the product doing what it is for: gold, as the pipeline's output. */
+.record[data-tone='critical'] .kind {
+  color: var(--gold);
+}
+
+/* Outcome tag. The words carry the meaning; the shape and border style repeat it without colour:
+ * hollow square (review), dashed (coverage gap), filled square (critical finding). */
+.outcome {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 3px var(--space-3);
+  border: 1px solid;
+  border-radius: var(--radius);
+}
+
+.outcome::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+.review {
+  color: var(--purple-text);
+  border-color: rgb(var(--purple-rgb) / 0.7);
+}
+
+.gap {
+  color: var(--purple-text);
+  border-style: dashed;
+  border-color: rgb(var(--purple-rgb) / 0.95);
+}
+
+.gap::before {
+  border-style: dashed;
+}
+
+.critical {
+  color: var(--critical);
+  border-color: rgb(var(--critical-rgb) / 0.7);
+}
+
+.critical::before {
+  background: currentColor;
+}
+
+/* ── Record body ───────────────────────────────────────────── */
+.grid {
+  display: grid;
+  gap: var(--space-7);
+}
+
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.title {
+  max-width: 14ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--line);
+}
+
+.facts dt,
+.pairFacts dt,
+.exploitKey {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.facts dd {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  min-width: 0;
+}
+
+.field,
+.reading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.fieldLabel {
+  margin: 0; /* the reset stops at h3 */
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 400;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--purple-text);
+}
+
+.body,
+.readingBody {
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.body {
+  color: var(--text-2);
+}
+
+/* How to read it is the point of the record, so it is set in full text colour and ruled off. */
+.reading {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--purple);
+}
+
+.record[data-tone='critical'] .reading {
+  border-left-color: var(--gold);
+}
+
+.readingBody {
+  color: var(--text);
+}
+
+/* ── Numbers: equal size, always beside their label ─────────── */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.value {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.metricLabel {
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  color: var(--text-3);
+}
+
+/* ── Shared block inside "what Kuyfi observed" ─────────────── */
+.block {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.blockLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.fn,
+.inlineCode {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+}
+
+.fn {
+  margin-right: var(--space-3);
+}
+
+/* ── AMM: signals by severity ──────────────────────────────── */
+.bar {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+}
+
+.bar > span {
+  flex-basis: 0;
+  min-width: 6px;
+  border-radius: 1px;
+}
+
+.segMedium {
+  background: rgb(var(--purple-rgb) / 0.75);
+}
+
+.segHigh {
+  background: var(--gold);
+}
+
+.legend {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.legendCount {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.legendSeverity {
+  color: var(--text-2);
+}
+
+.highOn {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* ── Passkey: the coverage gap ─────────────────────────────── */
+.signalLine {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.coverage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--space-5) var(--space-5);
+  overflow: hidden;
+  border: 1px dashed rgb(var(--purple-rgb) / 0.95);
+  border-radius: var(--radius);
+}
+
+/* Hatching across the top edge reads as "not covered" without tinting the text. */
+.coverage::before {
+  content: '';
+  height: 10px;
+  margin: 0 calc(-1 * var(--space-5)) var(--space-2);
+  background: repeating-linear-gradient(
+    135deg,
+    rgb(var(--purple-rgb) / 0.5) 0 2px,
+    transparent 2px 8px
+  );
+}
+
+.gapLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--purple-text);
+}
+
+.gapRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+}
+
+.gapFn {
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.gapValue {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.gapNumber {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.gapNote {
+  color: var(--text-2);
+  text-wrap: balance;
+}
+
+/* ── Fixture: A/B pair and manual exploit evidence ─────────── */
+.pair {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-raised);
+}
+
+.pairRow {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.pairRow + .pairRow {
+  border-top: 1px solid var(--line);
+}
+
+.pairRow[data-finding='true'] {
+  box-shadow: inset 2px 0 0 var(--critical);
+}
+
+.signature {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.pairFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin: 0;
+}
+
+.pairFacts dd {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.findingId,
+.severity {
+  font-weight: 500;
+  color: var(--critical);
+}
+
+.exploit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--gold);
+}
+
+.exploitLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.exploitRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+
+.ledger {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.exploitText {
+  max-width: 56ch;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* ── Closing ───────────────────────────────────────────────── */
+.closing {
+  max-width: 62ch;
+  margin-top: var(--space-8);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+/* ── Breakpoints ───────────────────────────────────────────── */
+/* Columns follow the count so no single number is left alone on a row: 4, then 3 and 3, or 3 and 2. */
+@media (min-width: 640px) {
+  .metrics[data-count='4'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .metrics[data-count='5'],
+  .metrics[data-count='6'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .head {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--space-9);
+    align-items: end;
+  }
+
+  .grid {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: var(--space-9);
+    align-items: start;
+  }
+
+  /* The second record mirrors the first: the rail moves to the right. */
+  .record[data-side='right'] .grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  }
+
+  .record[data-side='right'] .aside {
+    order: 2;
+  }
+
+  /* The rail stays in view while its record is read. */
+  .aside {
+    position: sticky;
+    top: var(--space-8);
+  }
+}

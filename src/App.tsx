@@ -1,6 +1,7 @@
 import { ContentPlaceholder } from './sections/ContentPlaceholder'
 import { Hero } from './sections/Hero/Hero'
 import { ChaosMonkey } from './sections/narrative/ChaosMonkey'
+import { Evidence } from './sections/narrative/Evidence'
 import { HowItWorks } from './sections/narrative/HowItWorks'
 import { OsintScanner } from './sections/narrative/OsintScanner'
 import { RealTerminal } from './sections/narrative/RealTerminal'
@@ -17,6 +18,7 @@ export default function App() {
       <OsintScanner />
       <ChaosMonkey />
       <RealTerminal />
+      <Evidence />
       <ContentPlaceholder />
     </main>
   )

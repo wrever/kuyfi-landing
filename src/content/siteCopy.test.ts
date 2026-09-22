@@ -78,11 +78,12 @@ describe('siteCopy editorial rules', () => {
     }
   })
 
-  it('does not surface evidence numbers before the Evidence section is designed', () => {
+  it('keeps numbers out of the copy: evidence.ts is the only source of counts and identifiers', () => {
     for (const [path, text] of entries) {
       if (!MAY_CONTAIN_DIGITS.test(path)) expect(text, path).not.toMatch(/\d/)
     }
-    expect(siteCopy).not.toHaveProperty('evidence')
+    // The Evidence section has its words here and every number in evidence.ts, never the two mixed.
+    expect(collect(siteCopy.evidence).length).toBeGreaterThan(20)
   })
 
   it('is tidy: no doubled or surrounding whitespace', () => {
@@ -126,6 +127,7 @@ describe('core narrative', () => {
     siteCopy.osintScanner,
     siteCopy.chaosMonkey,
     siteCopy.terminal,
+    siteCopy.evidence,
   ]
 
   it('gives every section a bracketed label and a heading', () => {
