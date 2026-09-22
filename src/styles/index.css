@@ -1,0 +1,8 @@
+/* Self-hosted fonts (Latin subset). Space Grotesk is variable; Plex Mono uses two static weights. */
+@import '@fontsource-variable/space-grotesk/wght.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+@import './tokens.css';
+@import './reset.css';
+@import './global.css';
