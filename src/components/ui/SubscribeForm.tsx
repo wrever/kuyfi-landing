@@ -20,6 +20,7 @@ const MESSAGES: Record<SubscribeStatus, string> = {
   already: form.messages.already,
   invalid: form.messages.invalid,
   'rate-limited': form.messages.rateLimited,
+  blocked: form.messages.blocked,
   error: form.messages.error,
 }
 
@@ -69,7 +70,12 @@ export function SubscribeForm() {
           value={email}
           onChange={(event) => {
             setEmail(event.target.value)
-            if (status === 'invalid' || status === 'error' || status === 'rate-limited') {
+            if (
+              status === 'invalid' ||
+              status === 'error' ||
+              status === 'rate-limited' ||
+              status === 'blocked'
+            ) {
               setStatus('idle')
             }
           }}

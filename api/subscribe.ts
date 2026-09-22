@@ -24,12 +24,15 @@
  * handleSubscribe, which takes a Request and returns a Response so it can be tested with no network.
  */
 
+import { candidateClientIp, getPublicClientIp } from './_lib/ip'
+
 /** Results the browser understands. Kept in step with src/lib/subscribe.ts (a test checks it). */
 export const SUBSCRIBE_CODES = [
   'SUCCESS',
   'ALREADY_SUBSCRIBED',
   'INVALID_EMAIL',
   'RATE_LIMITED',
+  'SUBSCRIBER_BLOCKED',
   'UPSTREAM_ERROR',
 ] as const
 export type SubscribeCode = (typeof SUBSCRIBE_CODES)[number]
@@ -49,6 +52,7 @@ const STATUS: Record<SubscribeCode | RequestCode, number> = {
   ALREADY_SUBSCRIBED: 409,
   INVALID_EMAIL: 400,
   RATE_LIMITED: 429,
+  SUBSCRIBER_BLOCKED: 400,
   UPSTREAM_ERROR: 502,
   METHOD_NOT_ALLOWED: 405,
   INVALID_REQUEST: 400,
@@ -106,12 +110,6 @@ export function createRateLimiter(options: {
 
 const defaultLimiter = createRateLimiter({ limit: 5, windowMs: 10 * 60_000 })
 
-/** The caller's address as Vercel reports it, or null. The provider asks for it to judge spam. */
-function clientIp(request: Request): string | null {
-  const first = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
-  return first && /^[0-9a-f:.]{3,45}$/i.test(first) ? first : null
-}
-
 /** Turns what the provider answered into one of our own codes. Unknown answers are errors. */
 export function mapUpstream(status: number, body: unknown): SubscribeCode {
   if (status === 200 || status === 201) return 'SUCCESS'
@@ -122,6 +120,7 @@ export function mapUpstream(status: number, body: unknown): SubscribeCode {
     const code = upstreamCode(body).toLowerCase()
     if (/already|exist|duplicate/.test(code)) return 'ALREADY_SUBSCRIBED'
     if (/rate|limit|quota/.test(code)) return 'RATE_LIMITED'
+    if (code === 'subscriber_blocked') return 'SUBSCRIBER_BLOCKED'
     if (/email|invalid/.test(code)) return 'INVALID_EMAIL'
   }
   return 'UPSTREAM_ERROR'
@@ -189,8 +188,10 @@ export async function handleSubscribe(
   const email = fields.email
   if (typeof email !== 'string' || !isPlausibleEmail(email)) return reply('INVALID_EMAIL')
 
-  const ip = clientIp(request)
-  if (!(deps.limiter ?? defaultLimiter).allow(ip ?? 'unknown')) return reply('RATE_LIMITED')
+  const rateLimitKey = candidateClientIp(request) ?? 'unknown'
+  if (!(deps.limiter ?? defaultLimiter).allow(rateLimitKey)) return reply('RATE_LIMITED')
+
+  const publicIp = getPublicClientIp(request)
 
   if (!deps.apiKey) {
     log('not_configured')
@@ -208,7 +209,10 @@ export async function handleSubscribe(
         Authorization: `Token ${deps.apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email_address: email.trim(), ...(ip ? { ip_address: ip } : {}) }),
+      body: JSON.stringify({
+        email_address: email.trim(),
+        ...(publicIp ? { ip_address: publicIp } : {}),
+      }),
       signal: AbortSignal.timeout(deps.timeoutMs ?? UPSTREAM_TIMEOUT_MS),
     })
   } catch (error) {

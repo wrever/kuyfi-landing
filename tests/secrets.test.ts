@@ -76,8 +76,11 @@ describe('the provider key stays on the server', () => {
 })
 
 describe('the function directory', () => {
-  it('holds only the subscription function: test files there would be deployed as endpoints', () => {
-    expect(readdirSync(at('api'))).toEqual(['subscribe.ts'])
+  it('holds only the subscription function: anything else there would be deployed as its own endpoint', () => {
+    // Vercel does not route entries whose name starts with `_` (e.g. api/_lib), so shared,
+    // non-endpoint code can live there without becoming a Function of its own.
+    const routable = readdirSync(at('api')).filter((name) => !name.startsWith('_'))
+    expect(routable).toEqual(['subscribe.ts'])
   })
 })
 

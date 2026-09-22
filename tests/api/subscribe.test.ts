@@ -211,6 +211,39 @@ describe('the request sent to the provider', () => {
     })
   })
 
+  describe('local and private addresses are never forwarded as the subscriber IP', () => {
+    it.each([
+      '::1', // vercel dev, loopback IPv6
+      '127.0.0.1', // loopback IPv4
+      '192.168.1.10', // private IPv4
+      '10.0.0.5', // private IPv4
+      '172.16.0.1', // private IPv4
+      '172.31.255.255', // private IPv4
+      '169.254.1.1', // link-local IPv4
+      '::', // unspecified IPv6
+      'fe80::1', // link-local IPv6
+      'fc00::1', // unique-local IPv6
+    ])('omits ip_address for %s', async (ip) => {
+      const { call, provider } = setup()
+      await call({ email: EMAIL }, { ip })
+      expect(JSON.parse(provider.mock.calls[0][1]?.body as string)).toEqual({
+        email_address: EMAIL,
+      })
+    })
+
+    it.each([
+      ['203.0.113.7', '203.0.113.7'], // public IPv4
+      ['2001:db8::1', '2001:db8::1'], // public IPv6
+    ])('sends ip_address for a public address (%s)', async (ip, expected) => {
+      const { call, provider } = setup()
+      await call({ email: EMAIL }, { ip })
+      expect(JSON.parse(provider.mock.calls[0][1]?.body as string)).toEqual({
+        email_address: EMAIL,
+        ip_address: expected,
+      })
+    })
+  })
+
   it('never uses the real network', async () => {
     const { call } = setup()
     await call({ email: EMAIL })
@@ -255,6 +288,19 @@ describe('response states', () => {
   it('a provider rejection of the address is INVALID_EMAIL', async () => {
     const { call } = setup({ upstream: answer(400, { code: 'email_invalid' }) })
     expect((await readJson(await call({ email: EMAIL }))).code).toBe('INVALID_EMAIL')
+  })
+
+  it('a firewall block is SUBSCRIBER_BLOCKED, mapped to 400 without the provider detail', async () => {
+    const { call, logs } = setup({
+      upstream: answer(400, {
+        code: 'subscriber_blocked',
+        detail: 'This subscriber was blocked by your firewall.',
+      }),
+    })
+    const response = await call({ email: EMAIL })
+    expect(response.status).toBe(400)
+    expect(await readJson(response)).toEqual({ ok: false, code: 'SUBSCRIBER_BLOCKED' })
+    expect(logs.join(' ')).not.toContain('firewall')
   })
 
   it.each([
@@ -309,6 +355,7 @@ describe('response states', () => {
       'ALREADY_SUBSCRIBED',
       'INVALID_EMAIL',
       'RATE_LIMITED',
+      'SUBSCRIBER_BLOCKED',
       'UPSTREAM_ERROR',
     ])
   })

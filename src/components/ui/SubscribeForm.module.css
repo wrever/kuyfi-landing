@@ -106,6 +106,7 @@
 
 .message[data-status='invalid'],
 .message[data-status='rate-limited'],
+.message[data-status='blocked'],
 .message[data-status='error'] {
   border-left-style: dashed;
   border-left-color: var(--purple-text);

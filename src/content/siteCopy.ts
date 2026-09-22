@@ -414,6 +414,8 @@ export const siteCopy = {
         already: 'This email address is already subscribed.',
         invalid: 'Enter a valid email address.',
         rateLimited: 'Too many attempts. Please try again in a few minutes.',
+        blocked:
+          "We couldn't process this subscription. Please try another email address or try again later.",
         error: 'The subscription could not be completed. Please try again later.',
       },
     },

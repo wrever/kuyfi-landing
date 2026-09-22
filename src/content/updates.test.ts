@@ -53,7 +53,7 @@ describe('the form has every state it needs', () => {
 
   it('has a message for loading and for each way a request can end', () => {
     expect(Object.keys(messages).sort()).toEqual(
-      ['already', 'error', 'invalid', 'loading', 'rateLimited', 'success'].sort(),
+      ['already', 'blocked', 'error', 'invalid', 'loading', 'rateLimited', 'success'].sort(),
     )
     for (const [state, text] of Object.entries(messages)) {
       expect(text.length, state).toBeGreaterThan(10)
@@ -62,7 +62,18 @@ describe('the form has every state it needs', () => {
 
   it('maps every server result to its own state', () => {
     expect(SUBSCRIBE_CODES.map(statusFromCode)).toEqual([...RESULT_STATUSES])
-    expect(RESULT_STATUSES).toEqual(['success', 'already', 'invalid', 'rate-limited', 'error'])
+    expect(RESULT_STATUSES).toEqual([
+      'success',
+      'already',
+      'invalid',
+      'rate-limited',
+      'blocked',
+      'error',
+    ])
+  })
+
+  it('never reveals why a subscription was blocked (spam score, firewall, provider name)', () => {
+    expect(messages.blocked).not.toMatch(/spam|firewall|risk score|buttondown/i)
   })
 
   it('does not say "subscribed" on success: the provider still asks for an email confirmation', () => {

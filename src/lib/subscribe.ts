@@ -13,16 +13,24 @@ export const SUBSCRIBE_CODES = [
   'ALREADY_SUBSCRIBED',
   'INVALID_EMAIL',
   'RATE_LIMITED',
+  'SUBSCRIBER_BLOCKED',
   'UPSTREAM_ERROR',
 ] as const
 export type SubscribeCode = (typeof SUBSCRIBE_CODES)[number]
 
 /** What the form is showing. */
 export type SubscribeStatus =
-  'idle' | 'loading' | 'success' | 'already' | 'invalid' | 'rate-limited' | 'error'
+  'idle' | 'loading' | 'success' | 'already' | 'invalid' | 'rate-limited' | 'blocked' | 'error'
 
 /** Every state a finished request can end in, so the form and its copy can be checked against it. */
-export const RESULT_STATUSES = ['success', 'already', 'invalid', 'rate-limited', 'error'] as const
+export const RESULT_STATUSES = [
+  'success',
+  'already',
+  'invalid',
+  'rate-limited',
+  'blocked',
+  'error',
+] as const
 
 export const HONEYPOT_FIELD = 'website'
 
@@ -48,6 +56,8 @@ export function statusFromCode(code: SubscribeCode): SubscribeStatus {
       return 'invalid'
     case 'RATE_LIMITED':
       return 'rate-limited'
+    case 'SUBSCRIBER_BLOCKED':
+      return 'blocked'
     case 'UPSTREAM_ERROR':
       return 'error'
   }
