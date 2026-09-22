@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCopy } from '../../hooks/useCopy'
 import { Button } from './Button'
 import styles from './CopyId.module.css'
-
-type Status = 'idle' | 'copied' | 'failed'
 
 interface CopyIdProps {
   /** The full identifier. It is what gets copied, and what assistive tech reads. */
@@ -26,31 +24,7 @@ interface CopyIdProps {
  * full value is selected so Control C still works.
  */
 export function CopyId({ value, display, label, text }: CopyIdProps) {
-  const [status, setStatus] = useState<Status>('idle')
-  const fullRef = useRef<HTMLSpanElement>(null)
-  const timer = useRef<number | undefined>(undefined)
-
-  useEffect(() => () => window.clearTimeout(timer.current), [])
-
-  async function copy() {
-    let next: Status = 'copied'
-    try {
-      await navigator.clipboard.writeText(value)
-    } catch {
-      next = 'failed'
-      const node = fullRef.current
-      const selection = window.getSelection()
-      if (node && selection) {
-        const range = document.createRange()
-        range.selectNodeContents(node)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      }
-    }
-    setStatus(next)
-    window.clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => setStatus('idle'), 2400)
-  }
+  const { status, copy, selectRef } = useCopy(value)
 
   const shown = { idle: text.copy, copied: text.copied, failed: text.failed }[status]
   const announcement = {
@@ -63,7 +37,7 @@ export function CopyId({ value, display, label, text }: CopyIdProps) {
     <span className={styles.id}>
       <code className={styles.code}>
         <span aria-hidden="true">{display}</span>
-        <span ref={fullRef} className="sr-only">
+        <span ref={selectRef} className="sr-only">
           {value}
         </span>
       </code>
