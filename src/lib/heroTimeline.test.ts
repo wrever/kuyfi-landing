@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  DIVE_END,
   DIVE_MAX,
   VIDEO_PAUSE_AT,
   bloomOpacity,
@@ -8,6 +9,9 @@ import {
   copyOpacity,
   copyShift,
   dive,
+  diveProgress,
+  exitInk,
+  exitTint,
   frame2Opacity,
   parallaxFalloff,
   pointerOffset,
@@ -109,6 +113,57 @@ describe('bloom', () => {
   it('never overlaps the copy: the flood starts only after the copy is gone', () => {
     for (const p of samples) {
       if (copyOpacity(p) > 0) expect(bloomOpacity(p)).toBe(0)
+    }
+  })
+})
+
+describe('dive vs rig progress', () => {
+  it('maps the first DIVE_END of the rig onto dive progress 0 → 1', () => {
+    expect(diveProgress(0)).toBe(0)
+    expect(diveProgress(DIVE_END)).toBeCloseTo(1, 10)
+    expect(diveProgress(DIVE_END / 2)).toBeCloseTo(0.5, 10)
+  })
+
+  it('stays at 1 through the exit and clamps out-of-range input', () => {
+    expect(diveProgress(1)).toBe(1)
+    expect(diveProgress(-0.2)).toBe(0)
+    expect(diveProgress(3)).toBe(1)
+  })
+})
+
+describe('exit (light dims, ink returns)', () => {
+  const rigSamples = Array.from({ length: 201 }, (_, i) => i / 200)
+
+  it('tint runs from v = 0.70 to v = 0.90', () => {
+    expect(exitTint(0.7)).toBe(0)
+    expect(exitTint(0.8)).toBeCloseTo(0.5, 10)
+    expect(exitTint(0.9)).toBe(1)
+    expect(exitTint(1)).toBe(1)
+  })
+
+  it('ink is 0 until v = 0.86 and exactly 1 at the end of the rig', () => {
+    expect(exitInk(0)).toBe(0)
+    expect(exitInk(0.86)).toBe(0)
+    expect(exitInk(1)).toBe(1)
+  })
+
+  it('both layers are monotonic, so scrolling back up reverses them exactly', () => {
+    for (let i = 1; i < rigSamples.length; i++) {
+      expect(exitTint(rigSamples[i])).toBeGreaterThanOrEqual(exitTint(rigSamples[i - 1]))
+      expect(exitInk(rigSamples[i])).toBeGreaterThanOrEqual(exitInk(rigSamples[i - 1]))
+    }
+  })
+
+  it('never starts before the bloom has finished, so the flood is a peak and not a flat plateau', () => {
+    for (const v of rigSamples) {
+      if (exitTint(v) > 0) expect(bloomOpacity(diveProgress(v))).toBeGreaterThanOrEqual(0.99)
+    }
+  })
+
+  it('only starts inking once the dive is complete, and the tint leads the ink', () => {
+    expect(exitInk(DIVE_END)).toBe(0)
+    for (const v of rigSamples) {
+      expect(exitTint(v)).toBeGreaterThanOrEqual(exitInk(v))
     }
   })
 })

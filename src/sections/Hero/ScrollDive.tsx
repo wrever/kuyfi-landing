@@ -10,6 +10,9 @@ import {
   copyOpacity,
   copyShift,
   dive,
+  diveProgress,
+  exitInk,
+  exitTint,
   frame2Opacity,
   parallaxFalloff,
   wordmarkOpacity,
@@ -48,33 +51,39 @@ export function ScrollDive() {
     })
   }, [progress, scrollYProgress])
 
+  // The dive occupies the first DIVE_END of the rig; `p` is its own 0 → 1 progress.
+  const p = useTransform(progress, (v) => diveProgress(v))
+
   // ── Camera ──
   const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
   const pointer = usePointerParallax(finePointer)
   // Same composition as v2: scale outermost, translation inside it (so it scales with the camera).
   // The computed form of useTransform re-runs only when a MotionValue it reads changes.
   const cameraTransform = useTransform(() => {
-    const p = progress.get()
-    const falloff = parallaxFalloff(p)
+    const falloff = parallaxFalloff(p.get())
     const x = pointer.x.get() * falloff
     const y = pointer.y.get() * falloff
-    return `scale(${dive(p).toFixed(4)}) translate3d(calc(var(--camera-shift) + ${x.toFixed(2)}px), ${y.toFixed(2)}px, 0)`
+    return `scale(${dive(p.get()).toFixed(4)}) translate3d(calc(var(--camera-shift) + ${x.toFixed(2)}px), ${y.toFixed(2)}px, 0)`
   })
 
   // ── Crossfade + bloom ──
-  const frame2 = useTransform(progress, (p) => frame2Opacity(p))
-  const bloom = useTransform(progress, (p) => bloomOpacity(p))
+  const frame2 = useTransform(p, (t) => frame2Opacity(t))
+  const bloom = useTransform(p, (t) => bloomOpacity(t))
+
+  // ── Exit: plum tint, then ink (functions of the raw rig progress) ──
+  const tint = useTransform(progress, (v) => exitTint(v))
+  const ink = useTransform(progress, (v) => exitInk(v))
 
   // ── Copy ──
-  const wordmarkOpacityMV = useTransform(progress, (p) => wordmarkOpacity(p))
-  const wordmarkY = useTransform(progress, (p) => `${wordmarkShift(p).toFixed(2)}vh`)
-  const copyOpacityMV = useTransform(progress, (p) => copyOpacity(p))
-  const copyY = useTransform(progress, (p) => `${copyShift(p).toFixed(2)}vh`)
+  const wordmarkOpacityMV = useTransform(p, (t) => wordmarkOpacity(t))
+  const wordmarkY = useTransform(p, (t) => `${wordmarkShift(t).toFixed(2)}vh`)
+  const copyOpacityMV = useTransform(p, (t) => copyOpacity(t))
+  const copyY = useTransform(p, (t) => `${copyShift(t).toFixed(2)}vh`)
   // Invisible copy must not stay clickable or focusable.
-  const copyVisibility = useTransform(progress, (p) => (copyInteractive(p) ? 'visible' : 'hidden'))
-  const copyPointer = useTransform(progress, (p) => (copyInteractive(p) ? 'auto' : 'none'))
+  const copyVisibility = useTransform(p, (t) => (copyInteractive(t) ? 'visible' : 'hidden'))
+  const copyPointer = useTransform(p, (t) => (copyInteractive(t) ? 'auto' : 'none'))
 
-  useHeroVideoPlayback(videoRef, progress)
+  useHeroVideoPlayback(videoRef, p)
 
   return (
     <>
@@ -85,6 +94,8 @@ export function ScrollDive() {
           </m.div>
           <div className={styles.scrim} aria-hidden="true" />
           <m.div className={styles.bloom} style={{ opacity: bloom }} aria-hidden="true" />
+          <m.div className={styles.exitTint} style={{ opacity: tint }} aria-hidden="true" />
+          <m.div className={styles.exitInk} style={{ opacity: ink }} aria-hidden="true" />
           <HeroCopy
             wordmarkStyle={{ opacity: wordmarkOpacityMV, y: wordmarkY }}
             copyStyle={{
@@ -96,7 +107,6 @@ export function ScrollDive() {
           />
         </div>
       </section>
-      <div className={styles.handoff} aria-hidden="true" />
     </>
   )
 }

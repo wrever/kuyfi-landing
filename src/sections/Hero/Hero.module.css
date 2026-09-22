@@ -4,14 +4,20 @@
  * Portrait / square viewports switch to the "band" composition (see the media query at the bottom).
  */
 
-/* ── Rig: scroll distance = --rig-length − 100svh ─────────── */
+/*
+ * ── Rig: scroll distance = --rig-length − 100svh ───────────
+ * The dive takes the first DIVE_END (0.78, see lib/heroTimeline.ts) of that distance and the exit
+ * (light dims, ink returns) the rest. Desktop: 110svh / 0.78 = 141svh → 241svh. Portrait: 228svh.
+ */
 .rig {
-  --rig-length: 210svh;
+  --rig-length: 241svh;
   position: relative;
   height: var(--rig-length);
 }
 
 .stage {
+  --bloom-x: 65%; /* where the flood and its exit are centred */
+  --bloom-y: 50%;
   position: sticky;
   top: 0;
   height: 100svh;
@@ -81,8 +87,6 @@
 }
 
 .bloom {
-  --bloom-x: 65%;
-  --bloom-y: 50%;
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -96,28 +100,44 @@
   );
 }
 
-/* Gold haze at the top of whatever follows the hero: continuity out of the bloom. */
-.handoff {
-  position: relative;
-  z-index: 1;
-  height: 0;
+/*
+ * Exit. Both layers are opacity-only (compositor cheap), driven by scroll.
+ *   exitTint: a plum radial (clear in the middle, plum at the edges) so the light closes in and
+ *             passes gold → terracotta → plum instead of gold → olive.
+ *   exitInk:  flat #0E1113, so the last frame of the hero is exactly the ink of what follows.
+ * There is no gradient hanging over the next section: nothing to leave a seam.
+ */
+.exitTint {
+  position: absolute;
+  inset: 0;
   pointer-events: none;
+  opacity: 0;
+  /* The centre is tinted too: dimming gold on its own goes khaki, gold + purple goes terracotta. */
+  background: radial-gradient(
+    ellipse 90% 90% at var(--bloom-x) var(--bloom-y),
+    rgb(var(--purple-rgb) / 0.28) 0%,
+    rgb(var(--purple-rgb) / 0.46) 40%,
+    var(--plum) 100%
+  );
 }
 
-.handoff::before {
+/* Static film grain on the flood (SVG noise, rasterised once): texture instead of a flat wash. */
+.bloom::after {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 46svh;
-  background: linear-gradient(
-    180deg,
-    rgb(var(--bloom-1-rgb) / 0.5) 0%,
-    rgb(var(--gold-rgb) / 0.22) 22%,
-    rgb(var(--purple-rgb) / 0.1) 55%,
-    rgb(var(--ink-rgb) / 0) 100%
-  );
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n' x='0' y='0' width='100%25' height='100%25'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 260px 260px;
+  mix-blend-mode: overlay;
+  opacity: 1;
+}
+
+.exitInk {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--ink);
 }
 
 /* ── Copy ─────────────────────────────────────────────────── */
@@ -215,7 +235,7 @@
  */
 @media (max-aspect-ratio: 1/1) {
   .rig {
-    --rig-length: 200svh;
+    --rig-length: 228svh; /* dive 100svh / 0.78 = 128svh of scroll */
   }
 
   .camera {
@@ -245,7 +265,7 @@
       linear-gradient(0deg, rgb(var(--ink-rgb) / 0.5) 0%, rgb(var(--ink-rgb) / 0) 25%);
   }
 
-  .bloom {
+  .stage {
     /* Halfway along the keyhole's path (keyhole start ↔ screen centre) while the flood appears. */
     --bloom-x: 67%;
     --bloom-y: calc(75svh - 25.8vw);

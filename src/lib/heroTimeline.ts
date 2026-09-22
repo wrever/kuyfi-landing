@@ -10,6 +10,26 @@
 
 export const clamp01 = (x: number): number => Math.min(1, Math.max(0, x))
 
+const smoothstep = (t: number): number => t * t * (3 - 2 * t)
+
+/**
+ * The rig is longer than the dive itself. Scroll progress `v` (0 → 1 over the whole rig) is split:
+ *   v in [0, DIVE_END]  → the dive, as dive progress p = v / DIVE_END (0 → 1). Same pixels per unit
+ *                          of p as the original 110svh dive, so the mid-scroll feel is unchanged.
+ *   v in [DIVE_END, 1]  → the exit: the light dims and ink returns (see exitTint / exitInk).
+ * CSS keeps them in sync: desktop rig 241svh (110 / 0.78 = 141svh of scroll), portrait 228svh.
+ */
+export const DIVE_END = 0.78
+export const diveProgress = (v: number): number => clamp01(v / DIVE_END)
+
+/**
+ * Exit, as functions of raw rig progress `v`. Darkening gold always turns olive, so the light does
+ * not simply fade: a plum tint takes over first (gold → terracotta → plum), then ink #0E1113.
+ * The tint starts right where the bloom finishes, so the flood is a peak, never a flat plateau.
+ */
+export const exitTint = (v: number): number => clamp01((v - 0.7) / 0.2)
+export const exitInk = (v: number): number => smoothstep(clamp01((v - 0.86) / 0.14))
+
 /** Camera scale at the end of the dive (v2: 1 + 3.4). */
 export const DIVE_MAX = 4.4
 
