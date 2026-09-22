@@ -54,3 +54,14 @@ describe('no placeholders left', () => {
     }
   })
 })
+
+describe('GitHub readiness: the MIT license the site claims actually exists', () => {
+  it('has a root LICENSE file that is the MIT license, matching package.json and the site copy', () => {
+    const license = read(join(root, 'LICENSE'))
+    expect(license).toMatch(/^MIT License/)
+    expect(license).toMatch(/Copyright \(c\) 2026 Kuyfi/)
+
+    const pkg = JSON.parse(read(join(root, 'package.json'))) as { license?: string }
+    expect(pkg.license).toBe('MIT')
+  })
+})
