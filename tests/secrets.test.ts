@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -5,10 +6,43 @@ import { describe, expect, it } from 'vitest'
 /**
  * The mailing provider's key must live only on the server. These tests read the repository as text
  * and fail if it could reach the browser, be committed, or be created by a test run.
+ *
+ * The property that matters is "a real env file must never enter the repository, its history or the
+ * client bundle" — not "a developer may never have a local env file". So the checks here ask git
+ * directly (what's tracked, what's ignored, what was ever committed), rather than walking the disk,
+ * which would also trip over an untracked, correctly-ignored `.env.local` kept around for manual
+ * testing.
  */
 
 const root = process.cwd()
 const at = (...parts: string[]) => join(root, ...parts)
+const git = (...args: string[]) => execFileSync('git', args, { cwd: root, encoding: 'utf8' })
+
+/** Every path git tracks, forward-slashed regardless of OS. */
+function gitLsFiles(): string[] {
+  return git('ls-files').split('\n').filter(Boolean)
+}
+
+/** Whether git's own rules (.gitignore and friends) would ignore this path. Doesn't require the
+ *  path to exist, and never reads its contents. */
+function isGitIgnored(pathspec: string): boolean {
+  try {
+    git('check-ignore', '-q', pathspec)
+    return true
+  } catch (error) {
+    // `git check-ignore` exits 1 for "not ignored" (a normal outcome here); anything else is real.
+    if (error && typeof error === 'object' && 'status' in error && error.status === 1) return false
+    throw error
+  }
+}
+
+/** Paths ever added under this pathspec in any branch's history, across the whole repository. */
+function everCommitted(pathspec: string): string[] {
+  return git('log', '--all', '--name-only', '--pretty=format:', '--', pathspec)
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+}
 
 function walk(dir: string, skip: readonly string[] = []): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -23,7 +57,9 @@ const clientFiles = [
   at('index.html'),
   at('vite.config.ts'),
 ]
-const read = (file: string) => readFileSync(file, 'utf8')
+// Normalized to `\n` so line-based assertions below don't depend on the checkout's line endings
+// (Windows' autocrlf turns committed LF files into CRLF on disk; macOS/Linux keep LF).
+const read = (file: string) => readFileSync(file, 'utf8').replace(/\r\n/g, '\n')
 
 describe('the provider key stays on the server', () => {
   it('is never named in browser code, in index.html or in the Vite config', () => {
@@ -59,19 +95,27 @@ describe('the provider key stays on the server', () => {
     expect(assignments).toEqual(['BUTTONDOWN_API_KEY='])
   })
 
-  it('ignores real env files and keeps only the example', () => {
-    const ignore = read(at('.gitignore')).split('\n')
-    expect(ignore).toContain('.env')
-    expect(ignore).toContain('.env.*')
-    expect(ignore).toContain('!.env.example')
-    expect(ignore).toContain('.vercel')
+  it('ignores every real env file, with .env.example as the only tracked exception', () => {
+    // Functional check (does git actually ignore it?), not a check of .gitignore's exact wording.
+    expect(isGitIgnored('.env')).toBe(true)
+    expect(isGitIgnored('.env.local')).toBe(true)
+    expect(isGitIgnored('.env.production')).toBe(true) // stands in for the whole .env.* family
+    expect(isGitIgnored('.vercel')).toBe(true)
+    expect(isGitIgnored('.env.example')).toBe(false)
   })
 
-  it('has no real env file in the repository tree', () => {
-    const files = walk(root, ['node_modules', '.git', 'dist', '.vercel']).map((file) =>
-      relative(root, file),
-    )
-    expect(files.filter((file) => /(^|[\\/])\.env(\..+)?$/.test(file))).toEqual(['.env.example'])
+  it('tracks .env.example only: no real env file is committed, however many exist untracked', () => {
+    // A correctly-ignored .env.local kept around for local Buttondown testing must not fail this:
+    // the property that matters is nothing real ever enters git, not that none exists on disk.
+    const trackedEnvFiles = gitLsFiles().filter((file) => /(^|\/)\.env(\..+)?$/.test(file))
+    expect(trackedEnvFiles).toEqual(['.env.example'])
+  })
+
+  it('no real env file was ever committed to git history, on any branch', () => {
+    for (const pathspec of ['.env', '.env.local', '.env.*']) {
+      const everReal = everCommitted(pathspec).filter((file) => file !== '.env.example')
+      expect(everReal, pathspec).toEqual([])
+    }
   })
 })
 
