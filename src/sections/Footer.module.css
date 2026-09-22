@@ -1,81 +1,138 @@
 /* Back to plain ink and grain: the closing's gold is gone by here, so there is no seam. */
 .footer {
-  padding: 0 var(--gutter) var(--space-8);
+  padding: var(--space-7) var(--gutter) var(--space-8);
   background:
     var(--grain) 0 0 / var(--grain-size) var(--grain-size),
     var(--ink);
 }
 
 .inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
   width: 100%;
   max-width: var(--container);
   margin: 0 auto;
 }
 
-/* The final system panel: hairline frame, 2px radius, ink-deep, mono labels. */
-.frame {
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--ink-deep);
-  font-family: var(--font-mono);
-}
-
-.bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-1) var(--space-4);
+/* ── Status echo: the same phrases the real CLI prints in its own status bar ── */
+.status {
   margin: 0;
-  padding: var(--space-4);
-  border-bottom: 1px solid var(--line);
-  font-size: var(--fs-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.02em;
 }
 
-.brand {
+.statusBrand {
+  font-weight: 500;
+  color: var(--purple-text);
+}
+
+.statusRole {
+  color: var(--text-2);
+}
+
+.statusNetwork {
+  color: var(--gold);
+}
+
+.dim {
+  color: var(--text-3);
+}
+
+/* ── The menu panel: a bordered TUI box with a floating "[ MENU ]" tag on its top edge ── */
+.panel {
+  position: relative;
+  border: 1px solid rgb(var(--purple-rgb) / 0.5);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgb(var(--purple-rgb) / 0.05), transparent 60%), var(--ink-deep);
+}
+
+.tag {
+  position: absolute;
+  top: 0;
+  left: var(--space-5);
+  padding: 0 var(--space-2);
+  transform: translateY(-50%);
+  background: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
   font-weight: 500;
   letter-spacing: var(--tracking-label);
   color: var(--purple-text);
 }
 
-.slogan {
-  color: var(--text-3);
-}
-
-.groups {
+.grid {
   display: grid;
+  padding-top: var(--space-6);
 }
 
-.group {
+.identity,
+.column {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-5) var(--space-4);
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-5) var(--space-6);
 }
 
-.group + .group {
+.identity {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.column + .column,
+.identity + .column {
   border-top: 1px solid var(--line);
+}
+
+.mark {
+  flex: none;
+  width: 2.75rem;
+  height: auto;
+  opacity: 0.85;
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: var(--text);
+}
+
+.slogan {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-3);
 }
 
 .label {
   margin: 0;
+  font-family: var(--font-mono);
   font-size: var(--fs-xs);
   letter-spacing: var(--tracking-label);
-  color: var(--text-3);
+  color: var(--purple-text);
 }
 
-.value,
-.text {
+.fact,
+.factText {
   margin: 0;
+  font-family: var(--font-mono);
   font-size: var(--fs-sm);
   color: var(--text);
 }
 
-.text {
+.factText {
   max-width: 34ch;
   color: var(--text-2);
 }
 
-.links {
+/* ── Menu rows: the same shape the real CLI's own menu uses, "[n]  name" ── */
+.menu {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -83,26 +140,86 @@
   list-style: none;
 }
 
-/* A full-height row on phones so every link is an easy tap. */
-.link {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: var(--fs-sm);
-  color: var(--text);
+.menuRow {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding: 2px 0;
   transition: color var(--dur) var(--ease-out);
 }
 
-.link:hover {
+.index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
   color: var(--gold);
 }
 
+.menuText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.menuName {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  transition: color var(--dur) var(--ease-out);
+}
+
+.menuHost {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-3);
+  overflow-wrap: anywhere;
+}
+
+.menuRow:hover .menuName {
+  color: var(--gold);
+}
+
+/* ── Warning line: the same dashed, purple mark Evidence uses for "not exercised" / caution ── */
+.warning {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-1);
+}
+
+.warningMark {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 0.35em;
+  border: 1px dashed var(--purple-text);
+  border-radius: 1px;
+}
+
+.warningText {
+  margin: 0;
+  max-width: 76ch;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+  color: var(--text-3);
+}
+
+.warningLabel {
+  margin-right: var(--space-2);
+  letter-spacing: var(--tracking-label);
+  color: var(--purple-text);
+}
+
+/* ── Legal ─────────────────────────────────────────────────── */
 .legal {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-1) 0;
   border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
   font-size: var(--fs-xs);
   line-height: 1.6;
   color: var(--text-3);
@@ -112,25 +229,24 @@
   margin: 0;
 }
 
+@media (min-width: 640px) {
+  .menuRow {
+    min-height: 32px;
+  }
+}
+
 @media (min-width: 900px) {
-  .bar,
-  .legal {
-    padding-inline: var(--space-6);
+  .grid {
+    grid-template-columns: minmax(11rem, 1.1fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1.2fr);
   }
 
-  .link {
-    min-height: 36px;
-  }
-
-  .groups {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr);
-  }
-
-  .group {
+  .identity,
+  .column {
     padding: var(--space-6);
   }
 
-  .group + .group {
+  .column + .column,
+  .identity + .column {
     border-top: 0;
     border-left: 1px solid var(--line);
   }

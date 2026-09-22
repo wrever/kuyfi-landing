@@ -391,9 +391,18 @@ export const siteCopy = {
 
   footer: {
     brand: 'KUYFI',
-    productLabel: 'PRODUCT',
-    versionLabel: 'VERSION',
+    // Spaced out, like the real CLI sets its own wordmark next to the ASCII cat.
+    wordmark: 'K U Y F I',
+    menuTag: '[ MENU ]',
+    // Two phrases the real CLI prints verbatim in its own status bar (see terminalSession.ts).
+    // Permanently true: Kuyfi has no Mainnet support to report a status for, so this is decoration
+    // drawn from the product's real, static self-description, not a live check by this page.
+    statusRole: 'SECURITY TERMINAL',
+    networkTag: 'TESTNET',
+    productLabel: 'PROJECT',
+    releaseLabel: 'RELEASE',
     networkLabel: 'NETWORK CONTEXT',
+    usageLabel: 'RESPONSIBLE USE',
     links: {
       github: 'GitHub',
       npm: 'npm',
@@ -401,6 +410,9 @@ export const siteCopy = {
     },
     license: '{license} license',
     network: 'Evidence shown on this site uses Stellar Testnet.',
+    usage:
+      'Kuyfi sends real Testnet transactions. Run it only against contracts you own or have ' +
+      'explicit authorization to test, and never against Mainnet.',
     // The copyright sign is added where the line is built (content/footer.ts): it is a symbol, not
     // copy, and the editorial checks treat it as a pictograph.
     owner: 'Kuyfi',
