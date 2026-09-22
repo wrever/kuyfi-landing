@@ -27,6 +27,16 @@ React 19 · Vite · TypeScript · Motion for React · CSS Modules + global token
 | `npm run format:check` | Prettier (check only)                    |
 | `npm test`             | Vitest (single run)                      |
 
+## Testing on another device
+
+```bash
+npm run dev -- --host
+```
+
+Vite prints a `Network` URL (for example `http://192.168.x.x:5173/`). Open it from a phone on the same
+local network to check touch scrolling, the hero dive and the portrait layouts on real hardware. This
+workflow has been validated manually.
+
 ## Layout
 
 ```
