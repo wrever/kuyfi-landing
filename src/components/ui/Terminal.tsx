@@ -1,6 +1,7 @@
 import { useRef, type CSSProperties } from 'react'
 import { useInView, useReducedMotion } from 'motion/react'
-import type { TerminalLine, TerminalSession } from '../../content/terminalSession'
+import type { TerminalBlock, TerminalLine, TerminalSession } from '../../content/terminalSession'
+import { splitSession } from '../../content/terminalView'
 import styles from './Terminal.module.css'
 
 interface TerminalProps {
@@ -11,6 +12,15 @@ interface TerminalProps {
   tag: string
   /** Line under the terminal that says where the transcript comes from. */
   note: string
+  /** The part of the real session kept behind a native disclosure. */
+  fullSession: {
+    /** Text of the summary, e.g. "View full session". */
+    summary: string
+    /** Accessible name of the region inside, which shows only what the main view leaves out. */
+    region: string
+    /** Site annotation above that screen. Not CLI output. */
+    caption: string
+  }
 }
 
 /** Position of a line in the reveal sequence. Read by CSS as `--i`. */
@@ -94,20 +104,45 @@ function Line({ line, index }: { line: TerminalLine; index: number }) {
   )
 }
 
+function Block({ block, start }: { block: TerminalBlock; start: number }) {
+  let index = start
+  return (
+    <div className={styles.block} data-block={block.id}>
+      {block.caption && (
+        <span className={styles.caption} style={order(index++)}>
+          {block.caption}
+        </span>
+      )}
+      {block.lines.map((line, i) => (
+        <Line key={i} line={line} index={index++} />
+      ))}
+    </div>
+  )
+}
+
+/** Lines a block puts on screen: its lines, plus its caption. */
+const weight = (block: TerminalBlock) => block.lines.length + (block.caption ? 1 : 0)
+
 /**
- * Terminal for a real, recorded CLI session. The whole transcript is always in the DOM, in reading
- * order, as text: the reveal only changes opacity, once, when the terminal reaches the viewport, and
- * is skipped entirely with reduced motion. The transcript is a scroll region (focusable) so narrow
- * screens scroll it sideways instead of shrinking the type.
+ * Terminal for a real, recorded CLI session. The main view shows the command and the result screen;
+ * the rest of the session is one native disclosure away, in the same transcript order and never
+ * repeated. The whole transcript is always in the DOM as text.
+ *
+ * The main view reveals once, when the terminal reaches the viewport (opacity only, staggered in
+ * transcript order) and is not hidden at all with reduced motion. Everything is a scroll region
+ * (focusable), so narrow screens scroll it sideways instead of shrinking the type.
  */
-export function Terminal({ session, label, tag, note }: TerminalProps) {
+export function Terminal({ session, label, tag, note, fullSession }: TerminalProps) {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px 0px -18% 0px' })
   const reduceMotion = useReducedMotion()
   const state = reduceMotion || inView ? 'shown' : 'pending'
 
-  const { meta, blocks } = session
-  let index = 0
+  const { meta } = session
+  const { main, rest } = splitSession(session)
+
+  /** Where each block begins in the reveal sequence: the lines and captions before it. */
+  const starts = main.map((_, i) => main.slice(0, i).reduce((n, block) => n + weight(block), 0))
 
   return (
     <figure ref={ref} className={styles.terminal} data-state={state}>
@@ -127,20 +162,30 @@ export function Terminal({ session, label, tag, note }: TerminalProps) {
 
         <div role="region" aria-label={label} tabIndex={0} className={styles.screen}>
           <div className={styles.transcript}>
-            {blocks.map((block) => (
-              <div key={block.id} className={styles.block} data-block={block.id}>
-                {block.caption && (
-                  <span className={styles.caption} style={order(index++)}>
-                    {block.caption}
-                  </span>
-                )}
-                {block.lines.map((line, i) => (
-                  <Line key={i} line={line} index={index++} />
-                ))}
-              </div>
+            {main.map((block, i) => (
+              <Block key={block.id} block={block} start={starts[i]} />
             ))}
           </div>
         </div>
+
+        {rest.length > 0 && (
+          <details className={styles.session}>
+            <summary className={styles.summary}>{fullSession.summary}</summary>
+            <div
+              role="region"
+              aria-label={fullSession.region}
+              tabIndex={0}
+              className={`${styles.screen} ${styles.sessionScreen}`}
+            >
+              <div className={styles.transcript}>
+                <span className={styles.caption}>{fullSession.caption}</span>
+                {rest.map((block) => (
+                  <Block key={block.id} block={block} start={0} />
+                ))}
+              </div>
+            </div>
+          </details>
+        )}
       </div>
 
       <figcaption className={styles.note}>{note}</figcaption>

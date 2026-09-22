@@ -18,6 +18,8 @@
 }
 
 .terminal {
+  /* Delay between two lines of the main view. About 30 lines, so the whole reveal lands in ~1.6s. */
+  --step: 40ms;
   position: relative;
   margin: 0;
   font-family:
@@ -244,11 +246,81 @@
   opacity: 1;
   transform: none;
   transition:
-    opacity 420ms var(--ease-out) calc(var(--i, 0) * 55ms),
-    transform 420ms var(--ease-out) calc(var(--i, 0) * 55ms);
+    opacity 420ms var(--ease-out) calc(var(--i, 0) * var(--step)),
+    transform 420ms var(--ease-out) calc(var(--i, 0) * var(--step));
+}
+
+/* ── View full session: a native <details> under the result ──
+ * What it holds was omitted from the main view, not hidden from the page, so it needs no reveal:
+ * it is simply there when opened.
+ */
+.session {
+  border-top: 1px solid var(--line);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-2);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A chevron drawn with two borders; it turns when the session is open. */
+.summary::after {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: -3px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform var(--dur) var(--ease-out);
+}
+
+.session[open] > .summary::after {
+  margin-top: 3px;
+  transform: rotate(-135deg);
+}
+
+.summary:hover {
+  color: var(--gold);
+}
+
+/* The window clips its children, so the focus ring sits inside the row. */
+.summary:focus-visible {
+  outline-offset: -3px;
+}
+
+.session[open] > .summary {
+  border-bottom: 1px solid var(--line);
+}
+
+.terminal .session .line,
+.terminal .session .caption {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 @media (prefers-reduced-motion: reduce), print {
+  .summary::after {
+    transition: none;
+  }
+
   .terminal .line,
   .terminal .caption {
     opacity: 1 !important;
@@ -258,7 +330,8 @@
 }
 
 @media (min-width: 640px) {
-  .bar {
+  .bar,
+  .summary {
     padding-inline: var(--space-5);
   }
 

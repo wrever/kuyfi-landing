@@ -27,6 +27,11 @@ export function RealTerminal() {
             label={copy.region}
             tag={copy.sessionTag}
             note={copy.note}
+            fullSession={{
+              summary: copy.fullSession,
+              region: copy.fullRegion,
+              caption: copy.fullCaption,
+            }}
           />
         </Reveal>
       </div>

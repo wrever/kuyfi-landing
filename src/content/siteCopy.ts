@@ -153,6 +153,9 @@ export const siteCopy = {
       'attack surface it reconstructs.',
     region: 'Real Kuyfi CLI session',
     sessionTag: 'REAL CLI SESSION',
+    fullSession: 'View full session',
+    fullRegion: 'Launch screen of the real Kuyfi CLI session',
+    fullCaption: 'Launch screen, before choosing a module',
     note:
       "Two unedited screens from a real session against Kuyfi's own intentionally vulnerable " +
       'Testnet fixture. Only the OSINT Scanner was run: it is read-only and submits no ' +
@@ -161,7 +164,8 @@ export const siteCopy = {
 
   evidence: {
     kicker: '[ 05 · EVIDENCE ]',
-    heading: 'Tested against real contracts, and against a contract designed to fail.',
+    heading:
+      'Tested against real contracts, and against a contract with a known authorization flaw.',
     intro:
       'A security tool has to do more than surface errors. It also needs to tell uncertainty ' +
       'apart from signal, make missing coverage visible and give a clear result when a known flaw ' +

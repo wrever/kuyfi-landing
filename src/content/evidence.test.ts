@@ -217,8 +217,13 @@ describe('evidence copy', () => {
   it('uses the agreed label and heading', () => {
     expect(siteCopy.evidence.kicker).toBe('[ 05 · EVIDENCE ]')
     expect(siteCopy.evidence.heading).toBe(
-      'Tested against real contracts, and against a contract designed to fail.',
+      'Tested against real contracts, and against a contract with a known authorization flaw.',
     )
+  })
+
+  it('no longer describes the fixture as designed to fail, anywhere in the copy', () => {
+    expect(JSON.stringify(siteCopy)).not.toMatch(/designed to fail/i)
+    expect(allText.join(' ')).not.toMatch(/designed to fail/i)
   })
 
   it('has one record per situation, in order: AMM, passkey wallet, fixture', () => {
