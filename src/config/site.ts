@@ -7,6 +7,7 @@ export const site = {
   installCommand: 'npm install -g @kuyfi/kuyfi',
   cliCommand: 'kuyfi',
   license: 'MIT',
+  copyrightYear: 2026,
   githubUrl: 'https://github.com/alex0tico/kuyfi',
   npmUrl: 'https://www.npmjs.com/package/@kuyfi/kuyfi',
   writeupUrl: 'https://github.com/alex0tico/kuyfi/blob/main/docs/technical-writeup.md',

@@ -388,4 +388,22 @@ export const siteCopy = {
   closing: {
     line: site.slogan,
   },
+
+  footer: {
+    brand: 'KUYFI',
+    productLabel: 'PRODUCT',
+    versionLabel: 'VERSION',
+    networkLabel: 'NETWORK CONTEXT',
+    links: {
+      github: 'GitHub',
+      npm: 'npm',
+      writeup: 'Technical write-up',
+    },
+    license: '{license} license',
+    network: 'Evidence shown on this site uses Stellar Testnet.',
+    // The copyright sign is added where the line is built (content/footer.ts): it is a symbol, not
+    // copy, and the editorial checks treat it as a pictograph.
+    owner: 'Kuyfi',
+    disclaimer: 'Not affiliated with the Stellar Development Foundation.',
+  },
 } as const

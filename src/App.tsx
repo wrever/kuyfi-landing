@@ -1,6 +1,7 @@
-import { ContentPlaceholder } from './sections/ContentPlaceholder'
+import { Footer } from './sections/Footer'
 import { Hero } from './sections/Hero/Hero'
 import { ChaosMonkey } from './sections/narrative/ChaosMonkey'
+import { Closing } from './sections/narrative/Closing'
 import { Evidence } from './sections/narrative/Evidence'
 import { HowItWorks } from './sections/narrative/HowItWorks'
 import { Install } from './sections/narrative/Install'
@@ -13,19 +14,22 @@ import { WhyBlackBox } from './sections/narrative/WhyBlackBox'
 
 export default function App() {
   return (
-    <main id="main">
-      <Hero />
-      <WhatKuyfiDoes />
-      <WhyBlackBox />
-      <HowItWorks />
-      <OsintScanner />
-      <ChaosMonkey />
-      <RealTerminal />
-      <Evidence />
-      <Install />
-      <OpenSource />
-      <Updates />
-      <ContentPlaceholder />
-    </main>
+    <>
+      <main id="main">
+        <Hero />
+        <WhatKuyfiDoes />
+        <WhyBlackBox />
+        <HowItWorks />
+        <OsintScanner />
+        <ChaosMonkey />
+        <RealTerminal />
+        <Evidence />
+        <Install />
+        <OpenSource />
+        <Updates />
+        <Closing />
+      </main>
+      <Footer />
+    </>
   )
 }

@@ -7,7 +7,7 @@ for Soroban.
 (What Kuyfi does, Why black-box, Pipeline, OSINT Scanner, Chaos Monkey), a static page atmosphere,
 the real CLI terminal, the Evidence section (three records built from `content/evidence.ts`),
 Install, Open Source with the v0.1.0 release status (`content/releaseStatus.ts`), the Updates
-subscription (`api/subscribe.ts`). Not deployed.
+subscription (`api/subscribe.ts`), the closing and the footer. Not deployed.
 
 `Kuyfi_landing_v2` (a sibling folder in the workspace) is the visual reference prototype and is
 left untouched.

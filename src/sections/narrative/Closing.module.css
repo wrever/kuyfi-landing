@@ -1,0 +1,74 @@
+/* Negative space, but bounded: the whole section stays around two thirds of a screen at most. */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  min-height: min(46svh, 28rem);
+  text-align: center;
+}
+
+/*
+ * The mark. The keyhole and the cat's eyes are real holes in the artwork, so the gold light placed
+ * behind it shows through them, as it does in the hero. Static: no animation.
+ */
+.mark {
+  position: relative;
+  isolation: isolate;
+  width: clamp(8rem, 20vw, 13rem);
+  aspect-ratio: 650 / 800;
+}
+
+.mark::before {
+  content: '';
+  position: absolute;
+  /* Centred on the keyhole: about 48% across and 72% down the artwork. */
+  left: -30%;
+  top: 22%;
+  width: 160%;
+  height: 100%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(var(--gold-rgb) / 0.6),
+    rgb(var(--gold-rgb) / 0.12) 40%,
+    transparent 100%
+  );
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0.92;
+}
+
+.line {
+  max-width: 12ch;
+  font-size: clamp(2.5rem, 1.2rem + 5.4vw, 5rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+/* A hairline with a node: the same mark that opens each record above. */
+.rule {
+  position: relative;
+  width: min(14rem, 50%);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+
+.rule::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: calc(50% - 4.5px);
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--gold);
+  border-radius: 1px;
+  background: var(--ink);
+}

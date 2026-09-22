@@ -13,6 +13,7 @@ export type Atmosphere =
   | 'install'
   | 'source'
   | 'updates'
+  | 'closing'
 
 interface SectionProps {
   id: string
