@@ -1,4 +1,5 @@
 .panel {
+  position: relative;
   margin: 0;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
@@ -60,6 +61,32 @@
   font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--text-4);
+}
+
+/* Local illumination: an ellipse behind the panel that is fully transparent at its own edge. */
+.panel[data-glow]::before {
+  content: '';
+  position: absolute;
+  /* Vertical reach stays inside the section padding, so the glow is gone before the next section. */
+  inset: calc(-1 * min(24%, var(--section-y) * 0.8)) -20%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.panel[data-glow='gold']::before {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(var(--gold-rgb) / 0.19),
+    transparent 100%
+  );
+}
+
+.panel[data-glow='purple']::before {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(var(--purple-rgb) / 0.3),
+    transparent 100%
+  );
 }
 
 @media (min-width: 640px) {

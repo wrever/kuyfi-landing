@@ -19,7 +19,7 @@ export function OsintScanner() {
   const { panel } = copy
 
   return (
-    <Section id="osint-scanner" labelledBy="osint-scanner-title">
+    <Section id="osint-scanner" labelledBy="osint-scanner-title" atmosphere="osint">
       <div className={styles.layout}>
         <Reveal className={styles.text}>
           <Kicker>{copy.kicker}</Kicker>
@@ -31,7 +31,7 @@ export function OsintScanner() {
         </Reveal>
 
         <Reveal className={styles.visual} delay={0.12}>
-          <Panel title={panel.title} tag={ui.exampleTag} note={panel.note}>
+          <Panel title={panel.title} tag={ui.exampleTag} note={panel.note} glow="gold">
             <PanelGroup label={panel.spec}>
               <dl className={styles.spec}>
                 <dt>{panel.specSource}</dt>

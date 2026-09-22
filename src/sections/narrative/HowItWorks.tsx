@@ -48,7 +48,7 @@ export function HowItWorks() {
       }
 
   return (
-    <Section id="how-it-works" labelledBy="how-it-works-title">
+    <Section id="how-it-works" labelledBy="how-it-works-title" atmosphere="grid">
       <div className={styles.head}>
         <Reveal className={styles.title}>
           <Kicker>{copy.kicker}</Kicker>

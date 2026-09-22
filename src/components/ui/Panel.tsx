@@ -7,6 +7,8 @@ interface PanelProps {
   tag: string
   /** Line under the body that says what the panel is (and is not). */
   note: string
+  /** Faint local light behind the panel. Decoration only. */
+  glow?: 'gold' | 'purple'
   children: ReactNode
 }
 
@@ -14,9 +16,9 @@ interface PanelProps {
  * Technical panel: thin border, mono header with an explicit "example" tag, groups separated by
  * hairlines. Used for interface examples, never for real output.
  */
-export function Panel({ title, tag, note, children }: PanelProps) {
+export function Panel({ title, tag, note, glow, children }: PanelProps) {
   return (
-    <figure className={styles.panel}>
+    <figure className={styles.panel} data-glow={glow}>
       <figcaption className={styles.head}>
         <span className={styles.title}>{title}</span>
         <span className={styles.tag}>{tag}</span>

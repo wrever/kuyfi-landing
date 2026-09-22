@@ -9,7 +9,7 @@ export function WhatKuyfiDoes() {
   const { whatKuyfiDoes: copy } = siteCopy
 
   return (
-    <Section id="what-kuyfi-does" labelledBy="what-kuyfi-does-title">
+    <Section id="what-kuyfi-does" labelledBy="what-kuyfi-does-title" atmosphere="lead">
       <div className={styles.split}>
         <Reveal className={styles.text}>
           <Kicker>{copy.kicker}</Kicker>

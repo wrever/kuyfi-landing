@@ -5,7 +5,9 @@
   place-items: center;
   min-height: 70svh;
   padding: var(--space-8) var(--gutter);
-  background: var(--ink);
+  background:
+    var(--grain) 0 0 / var(--grain-size) var(--grain-size),
+    var(--ink);
 }
 
 .label {

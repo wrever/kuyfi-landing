@@ -1,12 +1,95 @@
-/* Same ink as the end of the hero: sections start on it with no seam, so there is nothing to hide. */
+/*
+ * Page atmosphere: static, CSS only, no JS, no blend modes, no animation.
+ *
+ * One background stack per section (top layer first):
+ *   --atmos-top     ink fade, only where a section meets the hero's flat ink end
+ *   grain           the shared static tile (tokens.css), identical in every section
+ *   --atmos-glow    local illumination (gold or purple)
+ *   --atmos-window  ink that hides the grid outside an ellipse
+ *   --atmos-grid    technical grid
+ *   ink             #0E1113
+ *
+ * No seams: every glow is an ellipse that reaches alpha 0 before it touches the section's top or
+ * bottom edge, and every window closes to solid ink on those edges. Neighbouring sections therefore
+ * always meet on the same ink plus the same grain.
+ */
 .section {
+  --line-faint: rgb(var(--text-rgb) / 0.05);
+  --atmos-top: none;
+  --atmos-glow: none;
+  --atmos-window: none;
+  --atmos-grid: none;
+
   position: relative;
+  /* Keeps the negative z-index decorations (glows, marks) inside the section. */
+  isolation: isolate;
+  /* Local glows may extend past the gutter on phones; never let that become page scroll. */
+  overflow-x: clip;
   padding: var(--section-y) var(--gutter);
-  background: var(--ink);
+  background:
+    var(--atmos-top),
+    var(--grain) 0 0 / var(--grain-size) var(--grain-size),
+    var(--atmos-glow),
+    var(--atmos-window),
+    var(--atmos-grid),
+    var(--ink);
 }
 
 .inner {
+  position: relative;
   width: 100%;
   max-width: var(--container);
   margin: 0 auto;
+}
+
+/* ── What Kuyfi does: almost pure ink, a residue of the hero's gold ──
+ * The ink fade holds the top 240px to the hero's exact end colour, then the grain comes in.
+ */
+.lead {
+  --atmos-top: linear-gradient(180deg, var(--ink) 0, rgb(var(--ink-rgb) / 0) 240px);
+  --atmos-glow: radial-gradient(
+    ellipse 46% 34% at 84% 38%,
+    rgb(var(--gold-rgb) / 0.05),
+    transparent 100%
+  );
+}
+
+/* ── Why black-box: a very faint purple dusk over the negative space ── */
+.void {
+  --atmos-glow:
+    radial-gradient(ellipse 56% 40% at 22% 58%, rgb(var(--purple-rgb) / 0.13), transparent 100%),
+    radial-gradient(ellipse 34% 24% at 86% 28%, rgb(var(--purple-rgb) / 0.06), transparent 100%);
+  --atmos-window: radial-gradient(ellipse 56% 44% at 24% 56%, transparent 0%, var(--ink) 100%);
+  --atmos-grid: radial-gradient(circle at 0 0, rgb(var(--text-rgb) / 0.2) 0 1px, transparent 1.5px)
+    0 0 / var(--grid-step) var(--grid-step);
+}
+
+/* ── Pipeline: the grid, a little more present, windowed around the rail ── */
+.grid {
+  --atmos-window: radial-gradient(ellipse 64% 38% at 50% 62%, transparent 0%, var(--ink) 100%);
+  --atmos-grid:
+    radial-gradient(circle at 0 0, rgb(var(--text-rgb) / 0.22) 0 1px, transparent 1.5px) 0 0 /
+      var(--grid-step) var(--grid-step),
+    linear-gradient(90deg, rgb(var(--text-rgb) / 0.06) 1px, transparent 1px) 0 0 / var(--grid-step)
+      var(--grid-step),
+    linear-gradient(rgb(var(--text-rgb) / 0.06) 1px, transparent 1px) 0 0 / var(--grid-step)
+      var(--grid-step);
+}
+
+/* ── OSINT Scanner: a warm wash from the left; the panel carries its own gold halo ── */
+.osint {
+  --atmos-glow: radial-gradient(
+    ellipse 48% 40% at 18% 52%,
+    rgb(var(--gold-rgb) / 0.045),
+    transparent 100%
+  );
+}
+
+/* ── Chaos Monkey: the inverse. Purple, from the opposite side, and lower ── */
+.chaos {
+  --atmos-glow: radial-gradient(
+    ellipse 48% 40% at 84% 58%,
+    rgb(var(--purple-rgb) / 0.11),
+    transparent 100%
+  );
 }

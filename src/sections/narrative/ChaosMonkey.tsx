@@ -12,7 +12,7 @@ export function ChaosMonkey() {
   const lastRow = panel.classificationRows.length - 1
 
   return (
-    <Section id="chaos-monkey" labelledBy="chaos-monkey-title">
+    <Section id="chaos-monkey" labelledBy="chaos-monkey-title" atmosphere="chaos">
       <div className={styles.layout}>
         <Reveal className={styles.text}>
           <Kicker>{copy.kicker}</Kicker>
@@ -24,7 +24,7 @@ export function ChaosMonkey() {
         </Reveal>
 
         <Reveal className={styles.visual} delay={0.12}>
-          <Panel title={panel.title} tag={ui.exampleTag} note={panel.note}>
+          <Panel title={panel.title} tag={ui.exampleTag} note={panel.note} glow="purple">
             <PanelGroup label={panel.families}>
               <dl className={styles.families}>
                 {panel.familyList.map((family) => (

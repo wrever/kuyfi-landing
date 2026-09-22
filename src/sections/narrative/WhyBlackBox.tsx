@@ -9,7 +9,15 @@ export function WhyBlackBox() {
   const { whyBlackBox: copy } = siteCopy
 
   return (
-    <Section id="why-black-box" labelledBy="why-black-box-title">
+    <Section id="why-black-box" labelledBy="why-black-box-title" atmosphere="void">
+      {/* Decoration only: hairlines, a ruler and a low-opacity label. Nothing here is content. */}
+      <div className={styles.marks} aria-hidden="true">
+        <span className={styles.axis} />
+        <span className={styles.cross} />
+        <span className={styles.label}>contractspecv0</span>
+        <span className={styles.ruler} />
+      </div>
+
       <Reveal className={styles.head}>
         <Kicker>{copy.kicker}</Kicker>
         <h2 id="why-black-box-title" className={styles.heading}>

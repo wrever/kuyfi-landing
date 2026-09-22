@@ -69,6 +69,14 @@
   --container: 1180px;
   --gutter: clamp(1.25rem, 4vw, 1.75rem);
 
+  /* ── Atmosphere (static, CSS only; see Section.module.css) ─────
+   * Grain: one small SVG tile, rasterised once. White specks with their own alpha (no blend mode), so
+   * the average lift over ink is about 2 levels (peak ~10), and the hero's flat ink end meets it through an ink fade.
+   */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='g' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.1 0 0 0 -0.05'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  --grain-size: 200px;
+  --grid-step: 64px;
+
   /* ── Motion ──────────────────────────────────────────────── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 160ms;

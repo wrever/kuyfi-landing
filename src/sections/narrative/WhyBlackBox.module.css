@@ -42,3 +42,76 @@
     margin-left: calc(41.667% + var(--space-4));
   }
 }
+
+/* ── Backdrop marks ────────────────────────────────────────────
+ * Secondary, decorative, aria-hidden: they use the empty space around the two text blocks and
+ * carry no information. Hairlines and a ruler in the site's line colour, plus one oversized label in
+ * the name of the real WASM custom section Kuyfi decodes. Hidden below 900px, where the layout is
+ * a single dense column and there is no negative space to resolve.
+ */
+.marks {
+  --mark: rgb(var(--text-rgb) / 0.13);
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 900px) {
+  .marks {
+    display: block;
+  }
+}
+
+/* Construction line: the prose hangs from it. Fades out at both ends. */
+.axis {
+  position: absolute;
+  top: 34%;
+  bottom: calc(var(--section-y) * -0.55);
+  left: 41.667%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--mark) 22%, var(--mark) 78%, transparent);
+}
+
+/* Registration cross where the axis starts. */
+.cross {
+  position: absolute;
+  top: 34%;
+  left: 41.667%;
+  width: 13px;
+  height: 13px;
+  transform: translate(-50%, -50%);
+  background:
+    linear-gradient(var(--mark), var(--mark)) center / 100% 1px no-repeat,
+    linear-gradient(var(--mark), var(--mark)) center / 1px 100% no-repeat;
+}
+
+/* Spec ruler: hairline with minor and major ticks, under the oversized label. */
+.ruler {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 34%;
+  height: 12px;
+  background:
+    linear-gradient(var(--mark), var(--mark)) 0 0 / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, var(--mark) 0 1px, transparent 1px 12px) 0 0 / 100% 5px
+      no-repeat,
+    repeating-linear-gradient(90deg, var(--mark) 0 1px, transparent 1px 96px) 0 0 / 100% 12px
+      no-repeat;
+}
+
+.label {
+  position: absolute;
+  bottom: 1.75rem;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: min(3.5rem, 4.2vw);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: rgb(var(--text-rgb) / 0.055);
+}
