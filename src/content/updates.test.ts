@@ -33,7 +33,11 @@ describe('updates copy', () => {
   })
 
   it('states what to expect in one factual line, with no data-handling claims', () => {
-    expect(updates.form.note).toBe('Only Kuyfi development updates. Unsubscribe at any time.')
+    // "Unsubscribe at any time" was dropped: Buttondown's current docs describe the unsubscribe
+    // link as part of a customizable email template, not as a guarantee on every message, so the
+    // claim was not verifiable and is not made here.
+    expect(updates.form.note).toBe('Only Kuyfi development updates.')
+    expect(updates.form.note).not.toMatch(/unsubscribe/i)
     expect(strings.join(' ')).not.toMatch(
       /never (share|sell)|will not (share|sell)|we do not (share|sell)|gdpr|encrypt|privacy policy|no tracking/i,
     )

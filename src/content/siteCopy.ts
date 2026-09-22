@@ -405,7 +405,7 @@ export const siteCopy = {
       label: 'Email address',
       submit: 'Subscribe',
       submitting: 'Subscribing',
-      note: 'Only Kuyfi development updates. Unsubscribe at any time.',
+      note: 'Only Kuyfi development updates.',
       // The mailing provider asks new subscribers to confirm by email, so success means "check your
       // inbox", not "subscribed".
       messages: {
@@ -449,8 +449,8 @@ export const siteCopy = {
     license: '{license} license',
     network: 'Evidence shown on this site uses Stellar Testnet.',
     usage:
-      'Kuyfi sends real Testnet transactions. Run it only against contracts you own or have ' +
-      'explicit authorization to test, and never against Mainnet.',
+      'Chaos Monkey may submit transactions to Stellar Testnet. Do not run it against Mainnet ' +
+      'contracts without explicit authorization.',
     // The copyright sign is added where the line is built (content/footer.ts): it is a symbol, not
     // copy, and the editorial checks treat it as a pictograph.
     owner: 'Kuyfi',

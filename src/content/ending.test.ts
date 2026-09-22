@@ -113,10 +113,18 @@ describe('footer facts', () => {
 
   it('warns about Mainnet only to say Kuyfi should not be run there without authorization', () => {
     expect(footer.usage.label).toBe('RESPONSIBLE USE')
-    expect(footer.usage.text).toMatch(/Testnet/)
-    expect(footer.usage.text).toMatch(/Mainnet/)
-    expect(footer.usage.text).toMatch(/authorization/)
+    expect(footer.usage.text).toBe(
+      'Chaos Monkey may submit transactions to Stellar Testnet. Do not run it against Mainnet ' +
+        'contracts without explicit authorization.',
+    )
     expect(footer.usage.text).not.toMatch(/mainnet (is|now)? ?supported/i)
+  })
+
+  it('scopes the warning to Chaos Monkey, not to Kuyfi as a whole: the scanner is read-only', () => {
+    // OSINT Scanner never submits a transaction (see siteCopy.osintScanner.support); only Chaos
+    // Monkey can. The warning must not read as if every Kuyfi run sends transactions.
+    expect(footer.usage.text).toMatch(/^Chaos Monkey/)
+    expect(footer.usage.text).not.toMatch(/Kuyfi sends|Kuyfi (always |itself )?submits/i)
   })
 
   it('keeps the approved disclaimer and adds no other legal claim beyond the usage note', () => {
