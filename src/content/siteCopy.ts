@@ -153,7 +153,7 @@ export const siteCopy = {
       'attack surface it reconstructs.',
     region: 'Real Kuyfi CLI session',
     sessionTag: 'REAL CLI SESSION',
-    fullSession: 'View full session',
+    fullSession: 'View launch screen',
     fullRegion: 'Launch screen of the real Kuyfi CLI session',
     fullCaption: 'Launch screen, before choosing a module',
     note:

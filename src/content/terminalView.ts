@@ -6,7 +6,7 @@ import type { TerminalBlock, TerminalSession } from './terminalSession'
  *
  * By default the terminal shows the command and the real result screen, because that screen is the
  * one that demonstrates the product. Every other block of the captured session (the launch screen)
- * goes behind "View full session". Together they are the whole transcript, each block in exactly one
+ * goes behind "View launch screen". Together they are the whole transcript, each block in exactly one
  * place, so nothing is duplicated for assistive tech.
  */
 export const DEFAULT_VIEW: readonly TerminalBlock['id'][] = ['command', 'scan']

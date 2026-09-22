@@ -250,7 +250,7 @@
     transform 420ms var(--ease-out) calc(var(--i, 0) * var(--step));
 }
 
-/* ── View full session: a native <details> under the result ──
+/* ── View launch screen: a native <details> under the result ──
  * What it holds was omitted from the main view, not hidden from the page, so it needs no reveal:
  * it is simply there when opened.
  */

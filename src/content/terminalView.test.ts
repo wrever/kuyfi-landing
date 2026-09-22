@@ -21,7 +21,7 @@ describe('terminal view: what is on screen by default', () => {
   })
 })
 
-describe('terminal view: what moves behind "View full session"', () => {
+describe('terminal view: what moves behind "View launch screen"', () => {
   it('is the launch screen, and it is still in the transcript data', () => {
     expect(rest.map((b) => b.id)).toEqual(['menu'])
     expect(blocks.map((b) => b.id)).toContain('menu')
@@ -31,7 +31,7 @@ describe('terminal view: what moves behind "View full session"', () => {
 
   it('labels the launch screen as a site annotation and for assistive tech, with no digits', () => {
     const { fullSession, fullRegion, fullCaption } = siteCopy.terminal
-    expect(fullSession).toBe('View full session')
+    expect(fullSession).toBe('View launch screen')
     expect(fullRegion).toBe('Launch screen of the real Kuyfi CLI session')
     expect(fullCaption).toBe('Launch screen, before choosing a module')
   })

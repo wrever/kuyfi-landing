@@ -14,7 +14,7 @@ interface TerminalProps {
   note: string
   /** The part of the real session kept behind a native disclosure. */
   fullSession: {
-    /** Text of the summary, e.g. "View full session". */
+    /** Text of the summary, e.g. "View launch screen". */
     summary: string
     /** Accessible name of the region inside, which shows only what the main view leaves out. */
     region: string
