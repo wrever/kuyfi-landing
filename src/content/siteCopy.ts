@@ -94,7 +94,7 @@ export const siteCopy = {
       'Before testing a contract, Kuyfi needs to understand what is exposed. The scanner reads ' +
       'the deployed specification and reconstructs the functions, parameters and custom types ' +
       "that define the contract's callable surface.",
-    support: 'Read-only discovery. No source repository required.',
+    support: 'Discovery is read-only and does not require a source repository.',
     panel: {
       title: 'OSINT SCANNER',
       spec: 'CONTRACT SPEC',
@@ -154,8 +154,9 @@ export const siteCopy = {
     region: 'Real Kuyfi CLI session',
     sessionTag: 'REAL CLI SESSION',
     note:
-      "Excerpt from a scan of Kuyfi's own intentionally vulnerable Testnet fixture. The scan is " +
-      'read-only and submits no transactions.',
+      "Two unedited screens from a real session against Kuyfi's own intentionally vulnerable " +
+      'Testnet fixture. Only the OSINT Scanner was run: it is read-only and submits no ' +
+      'transactions.',
   },
 
   reporting: {

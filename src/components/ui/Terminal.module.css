@@ -4,10 +4,25 @@
  * Roles map the colours the real TUI (Ink) applies to each token onto the site palette:
  *   magenta -> purple, cyan and yellow -> gold, green -> gold, gray -> muted text.
  */
+/*
+ * Plex Mono's Latin subset has no box drawing or wide arrows. For exactly those ranges, prefer an
+ * installed font whose advance is 0.6em like Plex (Courier New, Liberation Mono), so lines of
+ * "─" join up and a box keeps its shape. Nothing is downloaded, and other text is unaffected.
+ */
+@font-face {
+  font-family: 'Kuyfi Terminal Glyphs';
+  src:
+    local('Courier New'), local('CourierNewPSMT'), local('Liberation Mono'),
+    local('DejaVu Sans Mono'), local('Menlo');
+  unicode-range: U+2190-21FF, U+2500-259F;
+}
+
 .terminal {
   position: relative;
   margin: 0;
-  font-family: var(--font-mono);
+  font-family:
+    'IBM Plex Mono', 'Kuyfi Terminal Glyphs', ui-monospace, 'SFMono-Regular', Menlo, Consolas,
+    monospace;
 }
 
 /* Local light: the strongest one on the page. Every ellipse stays inside this box and reaches alpha 0
@@ -128,6 +143,13 @@
 
 .blank {
   min-height: 1.7em;
+}
+
+/* A run of characters outside Plex Mono, held to the terminal grid (width set inline, in ch). */
+.cells {
+  display: inline-block;
+  text-align: center;
+  white-space: pre;
 }
 
 /* What the user did between two screens: annotation, not CLI output. */

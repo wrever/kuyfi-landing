@@ -6,26 +6,99 @@ import { blockText, lineText, terminalSession, type TerminalSource } from './ter
 
 /**
  * The transcript is real CLI output, so it is NOT held to the prose rules in siteCopy.test.ts (the CLI
- * prints an emoji, arrows and box characters itself). These tests hold it to something stricter:
- * it must match the product and the source of truth, and it must not contain anything invented.
+ * prints an emoji, arrows and box characters itself). These tests hold it to something stricter: it
+ * must be exactly what a captured session printed, and it must not contain anything invented.
  */
 
-const { blocks, meta, target } = terminalSession
+const { blocks, meta, target, provenance } = terminalSession
 const block = (id: string) => blocks.find((b) => b.id === id)!
 const sessionText = blocks.map(blockText).join('\n')
 
-const SOURCES: readonly TerminalSource[] = ['cli', 'demo', 'historical-run']
+const SOURCES: readonly TerminalSource[] = ['captured-session', 'cli', 'demo', 'historical-run']
 
 /** The scanner's own contract id shortening (dist/ui/format.js, truncateContractId). */
 const truncate = (id: string, head = 6, tail = 5) => `${id.slice(0, head)}...${id.slice(-tail)}`
 
+/**
+ * Screen 1 of the captured session (kuyfi launched, 70 columns): every line exactly as the terminal
+ * showed it. Generated from the capture, never edited.
+ */
+const CAPTURED_LAUNCH_SCREEN = [
+  ' KUYFI v0.1 · SECURITY TERMINAL · Network: TESTNET · [ESC] Menu',
+  '',
+  '                       /\\_/\\                /\\_/\\',
+  '                     ( o.o )   K U Y F I   ( o.o )',
+  '                      > ^ <                 > ^ <',
+  '                        [ CORE SECURITY MODULE ]',
+  '',
+  ' ┌──────────────────────────────────────────────────────────────────┐',
+  ' │                                                                  │',
+  ' │  [1]  OSINT Scanner       Map contract attack surface            │',
+  ' │  [2]  Chaos Monkey        Fuzz & stress test a contract          │',
+  ' │  [3]  System Logs         RPC connection status                  │',
+  ' │  [4]  About               Project info                           │',
+  ' │                                                                  │',
+  ' │  ↑↓ navigate   Enter select   1–4 shortcut                       │',
+  ' │                                                                  │',
+  ' └──────────────────────────────────────────────────────────────────┘',
+]
+
+/** Screen 4 of the captured session: the OSINT Scanner result after entering the Contract ID. */
+const CAPTURED_SCAN_SCREEN = [
+  ' KUYFI v0.1 · SECURITY TERMINAL · Network: TESTNET · [ESC] Menu',
+  '',
+  ' ┌────────────────────────────────────────────────────────────────┐',
+  ' │                                                                │',
+  ' │ [ESC] Back                                                     │',
+  ' │                                                                │',
+  ' │ ┌────────────────────────────────────────────────────────────┐ │',
+  ' │ │                                                            │ │',
+  ' │ │ 🛡 ATTACK SURFACE MAP ─── CDYUQR...JTPV7 ─── 1,700 bytes    │ │',
+  ' │ │                                                            │ │',
+  ' │ │ ✔ Functions found: 3                                       │ │',
+  ' │ │                                                            │ │',
+  ' │ │ get_value() → Has Return                                   │ │',
+  ' │ │ set_admin_value(admin: Address, value: I128) → Void        │ │',
+  ' │ │ secure_set_admin_value(admin: Address, value: I128) → Void │ │',
+  ' │ │                                                            │ │',
+  ' │ └────────────────────────────────────────────────────────────┘ │',
+  ' │                                                                │',
+  ' │ ─────────────────────────────────────────────                  │',
+  ' │ What do you want to do next?                                   │',
+  ' │                                                                │',
+  ' │ [S]  Scan another contract                                     │',
+  ' │ [C]  Run Chaos Monkey on this contract                         │',
+  ' │ [M]  Return to main menu                                       │',
+  ' │ [Q]  Quit                                                      │',
+  ' │ ─────────────────────────────────────────────                  │',
+  ' │                                                                │',
+  ' └────────────────────────────────────────────────────────────────┘',
+]
+
 describe('terminal session provenance', () => {
-  it('records where every block comes from', () => {
+  it('records where every block comes from, and shows only the captured session', () => {
     expect(blocks.length).toBeGreaterThan(0)
     for (const b of blocks) {
       expect(SOURCES, b.id).toContain(b.source)
+      expect(b.source, b.id).toBe('captured-session')
       expect(b.reference.length, b.id).toBeGreaterThan(20)
     }
+  })
+
+  it('records how the session was run: package, network, contract, mode and execution', () => {
+    expect(provenance.package).toBe('@kuyfi/kuyfi@0.1.0')
+    expect(provenance.package).toBe(`${site.packageName}@${evidence.project.version}`)
+    expect(provenance.network).toBe('Stellar Testnet')
+    expect(provenance.network).toBe(evidence.vulnerableFixture.network)
+    expect(provenance.contractId).toBe('CDYUQRWYE6INSGTMJWHPU32VSWVOZ456EUHJMMQXTCFXPFUXPH2JTPV7')
+    expect(provenance.contractId).toBe(evidence.vulnerableFixture.contractId)
+    expect(provenance.mode).toBe('OSINT Scanner')
+    expect(provenance.execution).toBe('read-only')
+  })
+
+  it('records that nothing but read-only ledger reads was observed', () => {
+    expect(provenance.observed.transactions).toBe(0)
+    expect(provenance.observed.rpcCalls).toEqual([{ method: 'getLedgerEntries', count: 2 }])
   })
 
   it('shows the real command of the published package', () => {
@@ -44,68 +117,77 @@ describe('terminal session provenance', () => {
     expect(target.contractId).toBe(evidence.vulnerableFixture.contractId)
     expect(target.description).toMatch(/intentionally vulnerable/i)
     expect(siteCopy.terminal.note).toMatch(/intentionally vulnerable/i)
+    expect(siteCopy.terminal.note).toMatch(/real session/i)
     expect(siteCopy.terminal.note).toMatch(/read-only/i)
   })
 })
 
-describe('terminal session: main menu', () => {
-  const lines = block('menu').lines.map(lineText)
-
-  it('prints the status bar exactly as the TUI does', () => {
-    expect(lines[0]).toBe('KUYFI v0.1 · SECURITY TERMINAL · Network: TESTNET · [ESC] Menu')
+describe('terminal session is exactly the captured screens', () => {
+  it('launch screen: every line as captured', () => {
+    expect(block('menu').lines.map(lineText)).toEqual(CAPTURED_LAUNCH_SCREEN)
   })
 
-  it('lists the four real modules, titles padded to 20 columns as HomeScreen does', () => {
-    const rows = lines.filter((line) => /^ {2}\[\d\] {2}/.test(line))
-    expect(rows).toEqual([
-      '  [1]  OSINT Scanner       Map contract attack surface',
-      '  [2]  Chaos Monkey        Fuzz & stress test a contract',
-      '  [3]  System Logs         RPC connection status',
-      '  [4]  About               Project info',
-    ])
-    // Two spaces, "[n]" and two spaces, then a 20 column title, then the description.
-    for (const row of rows) {
-      expect(row.slice(7, 27)).toHaveLength(20)
-      expect(row.slice(27)).toMatch(/^\S/)
+  it('scan screen: every line as captured, including the CLI emoji and its one-cell quirk', () => {
+    expect(block('scan').lines.map(lineText)).toEqual(CAPTURED_SCAN_SCREEN)
+  })
+
+  it('fits the 70 columns the session was captured at', () => {
+    for (const line of blocks.flatMap((b) => b.lines.map(lineText))) {
+      expect([...line].length).toBeLessThanOrEqual(70)
     }
   })
 
-  it('ends with the real key hints', () => {
-    expect(lines.at(-1)).toBe('  ↑↓ navigate   Enter select   1–4 shortcut')
+  it('keeps colour separate from text: segments only carry text and a role', () => {
+    for (const b of blocks) {
+      for (const line of b.lines) {
+        for (const part of line) expect(Object.keys(part).sort()).toEqual(['role', 'text'])
+      }
+    }
   })
 })
 
-describe('terminal session: OSINT Scanner attack surface map', () => {
-  const lines = block('scan').lines.map(lineText)
-  const functionLines = lines.filter((line) => / → (Has Return|Void)$/.test(line))
+describe('terminal session: what the screens say', () => {
+  const launch = block('menu').lines.map(lineText)
+  const scan = block('scan').lines.map(lineText)
+  const functionLines = scan.filter((line) => / → (Has Return|Void)\b/.test(line))
+
+  it('starts with the TUI status bar and lists the four real modules', () => {
+    expect(launch[0]).toBe(' KUYFI v0.1 · SECURITY TERMINAL · Network: TESTNET · [ESC] Menu')
+    expect(launch.filter((line) => /\[\d\] {2}/.test(line))).toHaveLength(4)
+  })
 
   it('prints the map header with the CLI shortening of the fixture id and its bytecode size', () => {
-    expect(lines[0]).toBe(`🛡 ATTACK SURFACE MAP ─── ${truncate(target.contractId)} ─── 1,700 bytes`)
+    const header = scan.find((line) => line.includes('ATTACK SURFACE MAP'))
+    expect(header).toContain(
+      `🛡 ATTACK SURFACE MAP ─── ${truncate(target.contractId)} ─── 1,700 bytes`,
+    )
     expect(truncate(target.contractId)).toBe('CDYUQR...JTPV7')
   })
 
   it('reports the number of functions found, and it matches the lines and evidence.ts', () => {
-    const found = lines.find((line) => line.startsWith('✔ Functions found: '))
-    expect(found).toBe(`✔ Functions found: ${functionLines.length}`)
+    const found = scan.find((line) => line.includes('Functions found: '))
+    expect(found).toContain(`✔ Functions found: ${functionLines.length}`)
     expect(functionLines).toHaveLength(evidence.vulnerableFixture.functions)
   })
 
-  it('lists exactly the three functions of the fixture, in the scanner format', () => {
-    expect(functionLines).toEqual([
-      'get_value() → Has Return',
-      'set_admin_value(admin: Address, value: I128) → Void',
-      'secure_set_admin_value(admin: Address, value: I128) → Void',
-    ])
-    for (const line of functionLines) {
-      expect(line).toMatch(/^[a-z_]+\((|[a-z_]+: [A-Za-z0-9]+(, [a-z_]+: [A-Za-z0-9]+)*)\) → /)
-    }
+  it('lists exactly the three functions of the fixture', () => {
+    const names = functionLines.map((line) => line.match(/[a-z_]+(?=\()/)?.[0])
+    expect(names).toEqual(['get_value', 'set_admin_value', 'secure_set_admin_value'])
   })
 
-  it('keeps the annotation between screens out of the CLI output', () => {
+  it('offers the real post-scan menu, but the session never selected Chaos Monkey', () => {
+    expect(scan.some((line) => line.includes('[C]  Run Chaos Monkey on this contract'))).toBe(true)
+    expect(provenance.actions.join(' ')).not.toMatch(/chaos|press c/i)
+  })
+})
+
+describe('terminal session: captions are not CLI output', () => {
+  it('keeps the annotation between screens out of the transcript', () => {
     expect(block('scan').caption).toBe('Press 1, enter the Contract ID, press Enter')
     expect(block('command').caption).toBeUndefined()
     expect(block('menu').caption).toBeUndefined()
     for (const b of blocks) {
+      if (b.caption) expect(sessionText, b.id).not.toContain(b.caption)
       expect(b.caption ?? '', b.id).not.toMatch(/[—―]/)
       expect(b.caption ?? '', b.id).not.toMatch(/\p{Extended_Pictographic}/u)
     }
@@ -128,9 +210,8 @@ describe('terminal session: nothing invented', () => {
     expect(new Set(ids)).toEqual(new Set([truncate(target.contractId)]))
   })
 
-  it('has no line that is not one of the sources documented above', () => {
-    // 1 command line + 8 menu lines + 7 map lines. A new line means a new source must be documented.
-    expect(blocks.map((b) => b.lines.length)).toEqual([1, 8, 7])
+  it('has exactly the captured line counts: 1 command, 17 launch, 28 scan', () => {
+    expect(blocks.map((b) => b.lines.length)).toEqual([1, 17, 28])
   })
 })
 
@@ -140,8 +221,15 @@ describe('terminal copy', () => {
     expect(siteCopy.terminal.heading).toBe('Kuyfi, from the terminal.')
   })
 
-  it('names the region and the session for assistive tech and the header', () => {
+  it('may say REAL CLI SESSION because the session was actually run, end to end', () => {
     expect(siteCopy.terminal.region).toBe('Real Kuyfi CLI session')
     expect(siteCopy.terminal.sessionTag).toBe('REAL CLI SESSION')
+    expect(provenance.actions).toEqual([
+      'launch kuyfi',
+      'press 1',
+      'type the Contract ID',
+      'press Enter',
+      'press q',
+    ])
   })
 })
