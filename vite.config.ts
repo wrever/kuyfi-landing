@@ -5,8 +5,8 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   plugins: [react()],
   test: {
-    // Only pure logic is tested (e.g. src/lib); no DOM environment needed.
+    // Only pure logic is tested (src/lib, src/content, the api handler); no DOM environment needed.
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.test.ts', 'tests/**/*.test.ts'],
   },
 })

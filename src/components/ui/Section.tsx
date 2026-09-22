@@ -3,7 +3,16 @@ import styles from './Section.module.css'
 
 /** Which static atmosphere a section sits in. Defined per section in Section.module.css. */
 export type Atmosphere =
-  'lead' | 'void' | 'grid' | 'osint' | 'chaos' | 'terminal' | 'evidence' | 'install' | 'source'
+  | 'lead'
+  | 'void'
+  | 'grid'
+  | 'osint'
+  | 'chaos'
+  | 'terminal'
+  | 'evidence'
+  | 'install'
+  | 'source'
+  | 'updates'
 
 interface SectionProps {
   id: string

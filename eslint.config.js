@@ -20,6 +20,11 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  // The serverless function and the tests that read the repository run on Node, not in a browser.
+  {
+    files: ['api/**/*.ts', 'tests/**/*.ts'],
+    languageOptions: { globals: globals.node },
+  },
   // Must stay last: turns off stylistic rules that Prettier owns.
   eslintConfigPrettier,
 ])

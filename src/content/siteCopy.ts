@@ -360,9 +360,25 @@ export const siteCopy = {
   },
 
   updates: {
+    kicker: '[ 08 · UPDATES ]',
     heading: 'Follow Kuyfi development.',
     body: 'Receive release notes, technical updates and new audit experiments by email.',
-    // Will connect to Buttondown through /api/subscribe. No form is implemented yet.
+    form: {
+      label: 'Email address',
+      submit: 'Subscribe',
+      submitting: 'Subscribing',
+      note: 'Only Kuyfi development updates. Unsubscribe at any time.',
+      // The mailing provider asks new subscribers to confirm by email, so success means "check your
+      // inbox", not "subscribed".
+      messages: {
+        loading: 'Sending your address.',
+        success: 'Almost done. Check your email to confirm your subscription.',
+        already: 'This email address is already subscribed.',
+        invalid: 'Enter a valid email address.',
+        rateLimited: 'Too many attempts. Please try again in a few minutes.',
+        error: 'The subscription could not be completed. Please try again later.',
+      },
+    },
   },
 
   ui: {

@@ -1,0 +1,133 @@
+.form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-deep);
+}
+
+/* A faint purple halo behind the form, gone before the section edge. */
+.form::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * min(30%, var(--section-y) * 0.7)) -12%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    rgb(var(--purple-rgb) / 0.2),
+    transparent 100%
+  );
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* 16px keeps iOS from zooming in on focus; 48px is an easy touch target. */
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text);
+  transition: border-color var(--dur) var(--ease-out);
+}
+
+.input:hover {
+  border-color: rgb(var(--text-rgb) / 0.45);
+}
+
+.input:focus-visible {
+  border-color: var(--gold);
+  outline-offset: 2px;
+}
+
+.input[aria-invalid='true'] {
+  border-style: dashed;
+  border-color: var(--purple-text);
+}
+
+.submit {
+  min-height: 48px;
+}
+
+.submit:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+/* Off screen, not display: none, so simple bots still see and fill it. */
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Room for two lines at all times: a message appearing never shifts the layout. */
+.message {
+  min-height: 3.25rem;
+  padding-left: var(--space-3);
+  border-left: 1px solid transparent;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.message[data-status='success'] {
+  border-left-color: var(--gold);
+  color: var(--text);
+}
+
+.message[data-status='already'] {
+  border-left-color: var(--purple);
+  color: var(--text);
+}
+
+.message[data-status='invalid'],
+.message[data-status='rate-limited'],
+.message[data-status='error'] {
+  border-left-style: dashed;
+  border-left-color: var(--purple-text);
+  color: var(--purple-text);
+}
+
+.note {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+@media (min-width: 640px) {
+  .form {
+    padding: var(--space-6);
+  }
+
+  .row {
+    flex-direction: row;
+  }
+
+  .submit {
+    flex: none;
+    min-width: 9.5rem;
+  }
+}

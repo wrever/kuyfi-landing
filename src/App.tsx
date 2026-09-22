@@ -7,6 +7,7 @@ import { Install } from './sections/narrative/Install'
 import { OpenSource } from './sections/narrative/OpenSource'
 import { OsintScanner } from './sections/narrative/OsintScanner'
 import { RealTerminal } from './sections/narrative/RealTerminal'
+import { Updates } from './sections/narrative/Updates'
 import { WhatKuyfiDoes } from './sections/narrative/WhatKuyfiDoes'
 import { WhyBlackBox } from './sections/narrative/WhyBlackBox'
 
@@ -23,6 +24,7 @@ export default function App() {
       <Evidence />
       <Install />
       <OpenSource />
+      <Updates />
       <ContentPlaceholder />
     </main>
   )

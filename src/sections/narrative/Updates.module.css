@@ -1,0 +1,38 @@
+.layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.heading {
+  max-width: 14ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.body {
+  max-width: 46ch;
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+.visual {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
+  .layout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: var(--space-9);
+    align-items: center;
+  }
+}
