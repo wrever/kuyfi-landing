@@ -1,0 +1,147 @@
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 60ch;
+}
+
+.heading {
+  max-width: 22ch;
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.intro {
+  font-size: var(--fs-lead);
+  color: var(--text-2);
+  text-wrap: pretty;
+}
+
+/* ── Two panels, not three equal cards ──────────────────────── */
+.panels {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-8);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--ink-raised);
+}
+
+/* A hairline of the panel's own colour along the top, like the terminal's gold edge light. */
+.panel::before {
+  content: '';
+  display: block;
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) 0;
+  height: 2px;
+  background: rgb(var(--gold-rgb) / 0.7);
+}
+
+.plannedPanel::before {
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(var(--purple-rgb) / 0.85) 0 10px,
+    transparent 10px 18px
+  );
+}
+
+.panelKicker {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-label);
+}
+
+.free {
+  color: var(--gold);
+}
+
+.planned {
+  color: var(--purple-text);
+}
+
+.panelTitle {
+  margin-top: calc(-1 * var(--space-3));
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-2);
+}
+
+.items li {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+/* Shipped: a filled gold square, the same mark Evidence uses for a confirmed, positive result. */
+.shipped li::before {
+  content: '';
+  position: absolute;
+  top: 0.4em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--gold);
+  border-radius: 1px;
+  background: var(--gold);
+}
+
+/* Exploring: a dashed hollow square, the same mark used for a coverage gap: not exercised yet. */
+.exploring li::before {
+  content: '';
+  position: absolute;
+  top: 0.4em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border: 1px dashed var(--purple-text);
+  border-radius: 1px;
+}
+
+.note {
+  margin: calc(-1 * var(--space-2)) 0 0;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.cta {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.closing {
+  max-width: 62ch;
+  margin-top: var(--space-7);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--text-3);
+  text-wrap: pretty;
+}
+
+@media (min-width: 900px) {
+  .panels {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

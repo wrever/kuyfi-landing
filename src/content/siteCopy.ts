@@ -2,7 +2,7 @@ import { site } from '../config/site'
 
 /**
  * Landing copy: central editorial source. Rendered so far: `hero` and the core narrative
- * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`, `evidence`, `install`, `openSource`). Later sections are
+ * (`whatKuyfiDoes`, `whyBlackBox`, `howItWorks`, `osintScanner`, `chaosMonkey`, `terminal`, `evidence`, `install`, `openSource`, `openCore`, `updates`). Later sections are
  * still draft direction.
  *
  * Style guide (enforced by siteCopy.test.ts):
@@ -359,8 +359,46 @@ export const siteCopy = {
     },
   },
 
+  openCore: {
+    kicker: '[ 08 · OPEN CORE ]',
+    heading: 'Free at the core. Sustainable at scale.',
+    intro:
+      'The scanner, the fuzzer and the terminal are open source today, under the MIT license, ' +
+      'with no paid tier gating them. A future service layer, built on the same engine, is how ' +
+      'development would keep being funded without changing that.',
+    free: {
+      kicker: 'FREE FOREVER',
+      title: 'The Kuyfi engine',
+      items: [
+        'OSINT Scanner: attack surface reconstruction from deployed WASM',
+        'Chaos Monkey: type-aware fuzzing across five vector families',
+        'JSON and PDF reports, generated locally by the CLI',
+        'The interactive terminal (TUI)',
+        'Full source on GitHub, MIT license',
+      ],
+      cta: 'View on GitHub',
+    },
+    planned: {
+      kicker: 'PLANNED PRODUCT LAYER',
+      title: 'A layer we are exploring, built on the same engine.',
+      items: [
+        'Structured CI/CD integration',
+        'Multi-contract, batch scanning',
+        'Hosted, on-demand scanning',
+        'Continuous monitoring workflows',
+        'Team and workspace features',
+        'Hosted report history and delivery',
+      ],
+      note: 'These are directions under consideration, not features available today.',
+      cta: 'Get product updates',
+    },
+    closing:
+      'If it ships, revenue from that layer would help fund continued development of the free ' +
+      'core. Nothing here is a commitment or a timeline.',
+  },
+
   updates: {
-    kicker: '[ 08 · UPDATES ]',
+    kicker: '[ 09 · UPDATES ]',
     heading: 'Follow Kuyfi development.',
     body: 'Receive release notes, technical updates and new audit experiments by email.',
     form: {

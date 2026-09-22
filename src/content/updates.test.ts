@@ -16,7 +16,7 @@ const strings = [
 
 describe('updates copy', () => {
   it('uses the agreed label, heading and body', () => {
-    expect(updates.kicker).toBe('[ 08 · UPDATES ]')
+    expect(updates.kicker).toBe('[ 09 · UPDATES ]')
     expect(updates.heading).toBe('Follow Kuyfi development.')
     expect(updates.body).toBe(
       'Receive release notes, technical updates and new audit experiments by email.',

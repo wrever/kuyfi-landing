@@ -12,6 +12,7 @@ export type Atmosphere =
   | 'evidence'
   | 'install'
   | 'source'
+  | 'openCore'
   | 'updates'
   | 'closing'
 

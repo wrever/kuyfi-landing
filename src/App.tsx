@@ -5,6 +5,7 @@ import { Closing } from './sections/narrative/Closing'
 import { Evidence } from './sections/narrative/Evidence'
 import { HowItWorks } from './sections/narrative/HowItWorks'
 import { Install } from './sections/narrative/Install'
+import { OpenCore } from './sections/narrative/OpenCore'
 import { OpenSource } from './sections/narrative/OpenSource'
 import { OsintScanner } from './sections/narrative/OsintScanner'
 import { RealTerminal } from './sections/narrative/RealTerminal'
@@ -26,6 +27,7 @@ export default function App() {
         <Evidence />
         <Install />
         <OpenSource />
+        <OpenCore />
         <Updates />
         <Closing />
       </main>
