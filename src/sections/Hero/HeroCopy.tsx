@@ -31,6 +31,9 @@ export function HeroCopy({ wordmarkStyle, copyStyle }: HeroCopyProps) {
             <ButtonLink variant="secondary" href={site.githubUrl}>
               {hero.githubCta}
             </ButtonLink>
+            <ButtonLink variant="secondary" href={site.docsUrl}>
+              Documentation
+            </ButtonLink>
           </div>
           <p className={styles.hint}>
             {hero.thenRun} <code>{site.cliCommand}</code> ·{' '}

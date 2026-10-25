@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/docs",
+      "destination": "/docs/",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/docs/md/(.*).md",
+      "headers": [
+        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+        { "key": "X-Markdown-Format", "value": "markdown-for-agents" }
+      ]
+    },
+    {
+      "source": "/docs/llms.txt",
+      "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
+    },
+    {
+      "source": "/docs/llms-full.txt",
+      "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
+    }
+  ]
+}

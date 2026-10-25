@@ -24,10 +24,24 @@ React 19 · Vite · TypeScript · Motion for React · CSS Modules + global token
 | `npm run dev`          | Local dev server                         |
 | `npm run build`        | Type-check (`tsc -b`) + production build |
 | `npm run preview`      | Serve the production build locally       |
+| `npm run docs:sync`    | Build sibling `kuyfi/docs-site` → `public/docs` |
 | `npm run lint`         | ESLint                                   |
 | `npm run format`       | Prettier (write)                         |
 | `npm run format:check` | Prettier (check only)                    |
 | `npm test`             | Vitest (single run)                      |
+
+## Product docs (`/docs`)
+
+The Astro docs live in [`alex0tico/kuyfi`](https://github.com/alex0tico/kuyfi) under `docs-site/` (branch `Docs`). This landing serves them at **https://kuyfi.vercel.app/docs** by shipping a static copy in `public/docs/`.
+
+```bash
+# From this repo, with ../kuyfi checked out on Docs:
+npm run docs:sync
+npm run build
+npm run preview   # open http://localhost:4173/docs/
+```
+
+Then commit `public/docs/` (+ `vercel.json`) and push so Vercel redeploys the landing.
 
 ## Testing on another device
 

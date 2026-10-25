@@ -11,4 +11,6 @@ export const site = {
   githubUrl: 'https://github.com/alex0tico/kuyfi',
   npmUrl: 'https://www.npmjs.com/package/@kuyfi/kuyfi',
   writeupUrl: 'https://github.com/alex0tico/kuyfi/blob/main/docs/technical-writeup.md',
+  /** Product documentation (Astro site synced into public/docs). */
+  docsUrl: '/docs/',
 } as const
