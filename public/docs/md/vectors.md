@@ -9,29 +9,40 @@ note: "Plain Markdown for LLMs/agents — NOT MDX (Markdown+JSX)."
 
 # Attack vectors reference
 
-## Math / boundary (`fuzzer_math.ts`)
+## Math / boundary (`fuzzer_math.ts` + `type_gen.ts`)
 
-OAT mutations. Labels: `ZERO`, `ONE`, `NEG_ONE`, `MAX_*`/`MIN_*`, `RANDOM_ADDR_A/B`, `EMPTY_BYTES`, `EMPTY_VEC`, `NONE`, recursive UDTs. Names like `amount::MAX_I128`.
+OAT mutations. Unsigned: no `NEG_ONE`/`MIN_*`. Symbol: `LONG_SYMBOL`(32) `OVERSIZE_SYMBOL`(64). String `LONG_STR`=256. Bytes `LARGE_BYTES`=256. `MAX_UDT_DEPTH=4`. Names like `amount::MAX_I128`.
 
 ## Authorization (`fuzzer_access.ts`)
 
 | Vector | Targets |
 |--------|---------|
-| `UNAUTHORIZED_CALL` | Admin-pattern names |
+| `UNAUTHORIZED_CALL` | Admin-pattern substrings |
 | `REINIT_ATTACK` | initialize / init / setup |
-| `SELF_CALL_ATTACK` | set_admin family |
+| `SELF_CALL_ATTACK` | **exact** `set_admin` | `set_pending_admin` | `transfer_admin` |
 | `UNAUTHORIZED_ADDR_CALL` | Non-admin + Address param |
 
 Admin substrings: pause, unpause, initialize, init, setup, upgrade, set_admin, set_pending_admin, transfer_admin, emergency.
 
-## Call ordering
+Only this family sets `expectedToFail=true`.
 
-`REINIT_SEQUENCE`, `REPEATED_WITHDRAW_SEQUENCE`, `REPEATED_CLAIM_SEQUENCE`
+## Call ordering (`fuzzer_call_order.ts`)
 
-## Fee / BPS
+Once per session. ≤1 fn per group; no reuse across groups.
 
-`BPS_*`: 0, 1, 9999, 10000, 10001, type max
+| Group | Patterns |
+|-------|----------|
+| `REINIT_SEQUENCE` | initialize, init, setup |
+| `REPEATED_WITHDRAW_SEQUENCE` | withdraw, remove |
+| `REPEATED_CLAIM_SEQUENCE` | `claim` only (no harvest) |
 
-## Liquidity
+## Fee / BPS (`fuzzer_fee.ts`)
 
-`ZERO_A_MAX_B`, `MAX_A_MAX_B`, … on swap/reserve-shaped names
+Param name `/fee|fees|bps|basis_point/i` + numeric types.
+Labels: `BPS_0|1|9999|10000|10001` + `MAX_<TYPE>`.
+
+## Liquidity (`fuzzer_liquidity.ts`)
+
+Fn name `/liquidity|swap|reserve/i`; first two numeric params.
+Labels: `ZERO_A_MAX_B`, `MAX_A_ZERO_B`, `MAX_A_MAX_B`, `ONE_A_MAX_B`, `MAX_A_ONE_B`, `MIN_A_MAX_B` (signed A only).
+Name: `LIQUIDITY::<paramA>x<paramB>::<pairLabel>`

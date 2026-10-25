@@ -9,10 +9,11 @@ note: "Plain Markdown for LLMs/agents — NOT MDX (Markdown+JSX)."
 
 # Interactive TUI
 
-1. OSINT Scanner
-2. Chaos Monkey
-3. System Logs
+1. OSINT Scanner — stores `lastScanResult`
+2. Chaos Monkey — **requires** prior scan in-session (notice if null)
+3. System Logs — **static** status panel (not live RPC stream)
 4. About
 
-Layout: large (≥100 cols) / compact / tooSmall.
-Exports: `[J]` JSON · `[P]` PDF · `[B]` both.
+Layout: large (≥100 cols) / compact (70–99) / tooSmall (<70 cols or <20 rows → TooSmallNotice).
+Resize: debounced clear without killing in-flight runs.
+Exports: `[J]` JSON · `[P]` PDF · `[B]` both (`wx` policy). Quit → exit 0.
